@@ -1,15 +1,15 @@
 import { Character, STORAGE_KEY } from "./types";
-import { 
-  defaults, 
-  newAttack, 
-  newDamage, 
-  newFeature, 
-  newEquip, 
-  emptySpellLevels, 
-  newSpell, 
-  newClass, 
-  newInnate 
-} from '../model/create';
+import {
+  defaults,
+  emptySpellLevels,
+  newAttack,
+  newClass,
+  newDamage,
+  newEquip,
+  newFeature,
+  newInnate,
+  newSpell,
+} from "./create";
 import { CLASS_INFO, levelFromXP } from "../rules";
 
 export function load(): Character {
@@ -59,9 +59,11 @@ function getProficiencies(character: any) {
       : (Number(character.skillProfs[k]) || 0);
   });
 
-  character.profList = Array.isArray(character.profList) ? character.profList : (
-    getOtherProficiencies(character)
-  );
+  character.profList = Array.isArray(character.profList)
+    ? character.profList
+    : (
+      getOtherProficiencies(character)
+    );
 }
 
 function getOtherProficiencies(c: any): any {
@@ -71,12 +73,13 @@ function getOtherProficiencies(c: any): any {
 }
 
 function getFeatures(character: any) {
-  character.features = (character.features || []).map((f: any) => Object.assign(
-    newFeature(),
-    { id: f.id || crypto.randomUUID() },
-    f,
-    f.metric ? {} : { metric: f.tracked ? "uses" : "none" }
-  )
+  character.features = (character.features || []).map((f: any) =>
+    Object.assign(
+      newFeature(),
+      { id: f.id || crypto.randomUUID() },
+      f,
+      f.metric ? {} : { metric: f.tracked ? "uses" : "none" },
+    )
   );
 }
 
@@ -88,12 +91,15 @@ function getEquipment(character: any) {
       : [];
   }
 
-  character.equipment = (character.equipment || []).map((e: any) => Object.assign(newEquip(), { id: e.id || crypto.randomUUID() }, e)
+  character.equipment = (character.equipment || []).map((e: any) =>
+    Object.assign(newEquip(), { id: e.id || crypto.randomUUID() }, e)
   );
 }
 
 function getSpellLevels(character: any) {
-  if (!Array.isArray(character.spellLevels) || character.spellLevels.length !== 10) {
+  if (
+    !Array.isArray(character.spellLevels) || character.spellLevels.length !== 10
+  ) {
     character.spellLevels = emptySpellLevels();
   }
 
@@ -118,33 +124,37 @@ function getSpeeds(character: any) {
     ...character.speeds,
   };
 
-  if (!character.speeds.walk && typeof character.speed === "string") character.speeds.walk = character.speed;
+  if (!character.speeds.walk && typeof character.speed === "string") {
+    character.speeds.walk = character.speed;
+  }
   character.speedShow = {
     fly: false,
     swim: false,
     climb: false,
-    burrow: false, 
-    ...character.speedShow
+    burrow: false,
+    ...character.speedShow,
   };
 }
 
 function getClasses(character: any) {
   const classInfo = {
-      hitDie: new RegExp(/\d+/).exec(String(character.hitDieType || "")) || (character.hitDieType = "8"),
-      caster: "none",
-    };
-    
-    if (!Array.isArray(character.classes) || !character.classes.length) {
+    hitDie: new RegExp(/\d+/).exec(String(character.hitDieType || "")) ||
+      (character.hitDieType = "8"),
+    caster: "none",
+  };
+
+  if (!Array.isArray(character.classes) || !character.classes.length) {
     const className = getClassName(character);
     const info = CLASS_INFO[className] || classInfo;
-    
+
     const level = levelFromXP(character.xp) || 1;
 
-    const hdRemaining = (character.hitDiceRemaining !== "" && character.hitDiceRemaining != null &&
-      !Number.isNaN(Number(character.hitDiceRemaining)))
+    const hdRemaining = (character.hitDiceRemaining !== "" &&
+        character.hitDiceRemaining != null &&
+        !Number.isNaN(Number(character.hitDiceRemaining)))
       ? Number(character.hitDiceRemaining)
       : level;
-      
+
     character.classes = className
       ? [
         Object.assign(newClass(), {
@@ -158,7 +168,9 @@ function getClasses(character: any) {
       : [];
   }
 
-  character.classes = (character.classes || []).map((x: any) => Object.assign(newClass(), x));
+  character.classes = (character.classes || []).map((x: any) =>
+    Object.assign(newClass(), x)
+  );
 }
 
 function getClassName(character: any) {
@@ -172,8 +184,10 @@ function getInnateSpells(character: any) {
   character.innate = Array.isArray(character.innate)
     ? character.innate.map((x: any) => {
       const o: any = Object.assign(newInnate(), x);
-      if (!o.origin && x && typeof x.source === "string" && x.source &&
-        !["pb", "ability", "level", "fixed", "formula"].includes(x.source)) {
+      if (
+        !o.origin && x && typeof x.source === "string" && x.source &&
+        !["pb", "ability", "level", "fixed", "formula"].includes(x.source)
+      ) {
         o.origin = x.source;
         o.source = "fixed";
       }
@@ -191,19 +205,25 @@ function getAttuned(character: any) {
 }
 
 function getSenses(character: any) {
-    ["senses", "resistances", "immunities"].forEach((k) => {
+  ["senses", "resistances", "immunities"].forEach((k) => {
     if (!Array.isArray(character[k])) character[k] = [];
   });
 }
 
 function getConditions(character: any) {
-  character.conditions = (character.conditions && typeof character.conditions === "object")
-    ? character.conditions
-    : {};
+  character.conditions =
+    (character.conditions && typeof character.conditions === "object")
+      ? character.conditions
+      : {};
 
-  character.exhaustion = Math.max(0, Math.min(6, Number(character.exhaustion) || 0));
+  character.exhaustion = Math.max(
+    0,
+    Math.min(6, Number(character.exhaustion) || 0),
+  );
 
-  character.autoSlots = character.autoSlots !== undefined ? !!character.autoSlots : true;
+  character.autoSlots = character.autoSlots !== undefined
+    ? !!character.autoSlots
+    : true;
 }
 
 function getPactUsed(character: any) {
@@ -212,7 +232,10 @@ function getPactUsed(character: any) {
 
 function getLevel(character: any) {
   character.level = character.classes.length
-    ? character.classes.reduce((n: number, x: any) => n + (Number(x.level) || 0), 0)
+    ? character.classes.reduce(
+      (n: number, x: any) => n + (Number(x.level) || 0),
+      0,
+    )
     : levelFromXP(character.xp);
 
   if (!character.level) character.level = 1;

@@ -1,310 +1,469 @@
 <!DOCTYPE html>
 <html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Attacks & Defence · D&amp;D Character Sheet</title>
+    <script>
+      try {
+        var t = localStorage.getItem("dnd-theme");
+        document.documentElement.dataset.theme = t ||
+          (matchMedia("(prefers-color-scheme: dark)").matches
+            ? "dark"
+            : "light");
+      } catch (e) {}
+    </script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+      rel="stylesheet"
+      href="https://fonts.googleapis.com/css2?family=Alegreya:ital,wght@0,400;0,500;0,700;1,400&family=Cinzel:wght@500;600;700&display=swap"
+    >
+    <link rel="stylesheet" href="../styles.css">
+    <script type="module" src="../src/main.ts"></script>
+  </head>
 
-<head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Attacks & Defence · D&amp;D Character Sheet</title>
-  <script>
-    try { var t = localStorage.getItem('dnd-theme'); document.documentElement.dataset.theme = t || (matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light'); } catch (e) { }
-  </script>
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link rel="stylesheet"
-    href="https://fonts.googleapis.com/css2?family=Alegreya:ital,wght@0,400;0,500;0,700;1,400&family=Cinzel:wght@500;600;700&display=swap">
-  <link rel="stylesheet" href="../styles.css">
-  <script type="module" src="../src/main.ts"></script>
-</head>
+  <body>
+    <main
+      class="wrap"
+      x-data="sheet()"
+      x-cloak
+      @sheet-short-rest.window="shortRest()"
+      @sheet-long-rest.window="longRest()"
+      @sheet-export.window="exportJson()"
+      @sheet-import.window="importJsonText($event.detail)"
+    >
+      <sheet-nav current="combat"></sheet-nav>
 
-<body>
-  <main class="wrap" x-data="sheet()" x-cloak @sheet-short-rest.window="shortRest()"
-    @sheet-long-rest.window="longRest()" @sheet-export.window="exportJson()"
-    @sheet-import.window="importJsonText($event.detail)">
+      <datalist id="dl-damage">
+        <option value="Acid"></option>
+        <option value="Bludgeoning"></option>
+        <option value="Cold"></option>
+        <option value="Fire"></option>
+        <option value="Force"></option>
+        <option value="Lightning"></option>
+        <option value="Necrotic"></option>
+        <option value="Piercing"></option>
+        <option value="Poison"></option>
+        <option value="Psychic"></option>
+        <option value="Radiant"></option>
+        <option value="Slashing"></option>
+        <option value="Thunder"></option>
+      </datalist>
 
-    <sheet-nav current="combat"></sheet-nav>
+      <datalist id="dl-weapon">
+        <option value="Unarmed Strike"></option>
+        <option value="Club"></option>
+        <option value="Dagger"></option>
+        <option value="Greatclub"></option>
+        <option value="Handaxe"></option>
+        <option value="Javelin"></option>
+        <option value="Light Hammer"></option>
+        <option value="Mace"></option>
+        <option value="Quarterstaff"></option>
+        <option value="Sickle"></option>
+        <option value="Spear"></option>
+        <option value="Light Crossbow"></option>
+        <option value="Dart"></option>
+        <option value="Shortbow"></option>
+        <option value="Sling"></option>
+        <option value="Battleaxe"></option>
+        <option value="Flail"></option>
+        <option value="Glaive"></option>
+        <option value="Greataxe"></option>
+        <option value="Greatsword"></option>
+        <option value="Halberd"></option>
+        <option value="Lance"></option>
+        <option value="Longsword"></option>
+        <option value="Maul"></option>
+        <option value="Morningstar"></option>
+        <option value="Pike"></option>
+        <option value="Rapier"></option>
+        <option value="Scimitar"></option>
+        <option value="Shortsword"></option>
+        <option value="Trident"></option>
+        <option value="War Pick"></option>
+        <option value="Warhammer"></option>
+        <option value="Whip"></option>
+        <option value="Blowgun"></option>
+        <option value="Hand Crossbow"></option>
+        <option value="Heavy Crossbow"></option>
+        <option value="Longbow"></option>
+        <option value="Net"></option>
+      </datalist>
 
-    <datalist id="dl-damage">
-      <option value="Acid"></option>
-      <option value="Bludgeoning"></option>
-      <option value="Cold"></option>
-      <option value="Fire"></option>
-      <option value="Force"></option>
-      <option value="Lightning"></option>
-      <option value="Necrotic"></option>
-      <option value="Piercing"></option>
-      <option value="Poison"></option>
-      <option value="Psychic"></option>
-      <option value="Radiant"></option>
-      <option value="Slashing"></option>
-      <option value="Thunder"></option>
-    </datalist>
+      <datalist id="dl-senses">
+        <option value="Darkvision 60 ft"></option>
+        <option value="Darkvision 120 ft"></option>
+        <option value="Superior Darkvision 120 ft"></option>
+        <option value="Blindsight 30 ft"></option>
+        <option value="Blindsight 60 ft"></option>
+        <option value="Tremorsense 60 ft"></option>
+        <option value="Truesight 60 ft"></option>
+        <option value="Devil's Sight 120 ft"></option>
+      </datalist>
 
-    <datalist id="dl-weapon">
-      <option value="Unarmed Strike"></option>
-      <option value="Club"></option>
-      <option value="Dagger"></option>
-      <option value="Greatclub"></option>
-      <option value="Handaxe"></option>
-      <option value="Javelin"></option>
-      <option value="Light Hammer"></option>
-      <option value="Mace"></option>
-      <option value="Quarterstaff"></option>
-      <option value="Sickle"></option>
-      <option value="Spear"></option>
-      <option value="Light Crossbow"></option>
-      <option value="Dart"></option>
-      <option value="Shortbow"></option>
-      <option value="Sling"></option>
-      <option value="Battleaxe"></option>
-      <option value="Flail"></option>
-      <option value="Glaive"></option>
-      <option value="Greataxe"></option>
-      <option value="Greatsword"></option>
-      <option value="Halberd"></option>
-      <option value="Lance"></option>
-      <option value="Longsword"></option>
-      <option value="Maul"></option>
-      <option value="Morningstar"></option>
-      <option value="Pike"></option>
-      <option value="Rapier"></option>
-      <option value="Scimitar"></option>
-      <option value="Shortsword"></option>
-      <option value="Trident"></option>
-      <option value="War Pick"></option>
-      <option value="Warhammer"></option>
-      <option value="Whip"></option>
-      <option value="Blowgun"></option>
-      <option value="Hand Crossbow"></option>
-      <option value="Heavy Crossbow"></option>
-      <option value="Longbow"></option>
-      <option value="Net"></option>
-    </datalist>
+      <datalist id="dl-resist">
+        <option value="Acid"></option>
+        <option value="Bludgeoning"></option>
+        <option value="Cold"></option>
+        <option value="Fire"></option>
+        <option value="Force"></option>
+        <option value="Lightning"></option>
+        <option value="Necrotic"></option>
+        <option value="Piercing"></option>
+        <option value="Poison"></option>
+        <option value="Psychic"></option>
+        <option value="Radiant"></option>
+        <option value="Slashing"></option>
+        <option value="Thunder"></option>
+        <option value="Nonmagical bludgeoning, piercing & slashing"></option>
+      </datalist>
 
-    <datalist id="dl-senses">
-      <option value="Darkvision 60 ft"></option>
-      <option value="Darkvision 120 ft"></option>
-      <option value="Superior Darkvision 120 ft"></option>
-      <option value="Blindsight 30 ft"></option>
-      <option value="Blindsight 60 ft"></option>
-      <option value="Tremorsense 60 ft"></option>
-      <option value="Truesight 60 ft"></option>
-      <option value="Devil's Sight 120 ft"></option>
-    </datalist>
+      <datalist id="dl-immune">
+        <option value="Acid"></option>
+        <option value="Bludgeoning"></option>
+        <option value="Cold"></option>
+        <option value="Fire"></option>
+        <option value="Force"></option>
+        <option value="Lightning"></option>
+        <option value="Necrotic"></option>
+        <option value="Piercing"></option>
+        <option value="Poison"></option>
+        <option value="Psychic"></option>
+        <option value="Radiant"></option>
+        <option value="Slashing"></option>
+        <option value="Thunder"></option>
+        <option value="Blinded"></option>
+        <option value="Charmed"></option>
+        <option value="Deafened"></option>
+        <option value="Frightened"></option>
+        <option value="Grappled"></option>
+        <option value="Incapacitated"></option>
+        <option value="Paralyzed"></option>
+        <option value="Petrified"></option>
+        <option value="Poisoned (condition)"></option>
+        <option value="Prone"></option>
+        <option value="Restrained"></option>
+        <option value="Stunned"></option>
+        <option value="Unconscious"></option>
+        <option value="Disease"></option>
+        <option value="Magical sleep"></option>
+      </datalist>
+      <sheet-toolbar></sheet-toolbar>
 
-    <datalist id="dl-resist">
-      <option value="Acid"></option>
-      <option value="Bludgeoning"></option>
-      <option value="Cold"></option>
-      <option value="Fire"></option>
-      <option value="Force"></option>
-      <option value="Lightning"></option>
-      <option value="Necrotic"></option>
-      <option value="Piercing"></option>
-      <option value="Poison"></option>
-      <option value="Psychic"></option>
-      <option value="Radiant"></option>
-      <option value="Slashing"></option>
-      <option value="Thunder"></option>
-      <option value="Nonmagical bludgeoning, piercing & slashing"></option>
-    </datalist>
-
-    <datalist id="dl-immune">
-      <option value="Acid"></option>
-      <option value="Bludgeoning"></option>
-      <option value="Cold"></option>
-      <option value="Fire"></option>
-      <option value="Force"></option>
-      <option value="Lightning"></option>
-      <option value="Necrotic"></option>
-      <option value="Piercing"></option>
-      <option value="Poison"></option>
-      <option value="Psychic"></option>
-      <option value="Radiant"></option>
-      <option value="Slashing"></option>
-      <option value="Thunder"></option>
-      <option value="Blinded"></option>
-      <option value="Charmed"></option>
-      <option value="Deafened"></option>
-      <option value="Frightened"></option>
-      <option value="Grappled"></option>
-      <option value="Incapacitated"></option>
-      <option value="Paralyzed"></option>
-      <option value="Petrified"></option>
-      <option value="Poisoned (condition)"></option>
-      <option value="Prone"></option>
-      <option value="Restrained"></option>
-      <option value="Stunned"></option>
-      <option value="Unconscious"></option>
-      <option value="Disease"></option>
-      <option value="Magical sleep"></option>
-    </datalist>
-    <sheet-toolbar></sheet-toolbar>
-
-    <div class="panel">
-      <div class="r-3" style="margin-bottom:12px">
-        <fieldset>
-          <legend>Armor Class</legend>
-          <label class="field">AC value<input type="number" x-model="c.ac"
-              style="text-align:center;font-size:18px;font-weight:700"></label>
-        </fieldset>
-        <fieldset style="text-align:center">
-          <legend>Initiative</legend>
-          <div style="font-size:20px;font-weight:700" x-text="initiative()"></div>
-          <div style="display:flex;gap:6px;justify-content:center;margin-top:4px">
-            <label class="field" style="align-items:center;font-size:10px;color:var(--muted)">bonus<input
-                style="width:48px;text-align:center" x-model="c.initBonus"></label>
-            <label class="field" style="align-items:center;font-size:10px;color:var(--muted)">override<input
-                style="width:48px;text-align:center" x-model="c.initOverride"></label>
-          </div>
-        </fieldset>
-        <fieldset>
-          <legend>Speed</legend>
-          <label class="field">Walking (ft)<input type="number" min="0" x-model="c.speeds.walk"
-              style="font-weight:700"></label>
-          <div style="display:flex;gap:10px;flex-wrap:wrap;margin-top:6px">
-            <template x-for="sp in SPEED_TYPES" :key="sp[0]">
-              <label class="field-in"><input type="checkbox" x-model="c.speedShow[sp[0]]"> <span
-                  x-text="sp[1]"></span></label>
-            </template>
-          </div>
-          <div class="col" style="gap:5px;margin-top:6px">
-            <template x-for="sp in SPEED_TYPES" :key="sp[0]">
-              <label class="field-in" x-show="c.speedShow[sp[0]]"><span x-text="sp[1]+' (ft)'"></span><input
-                  type="number" min="0" x-model="c.speeds[sp[0]]" style="width:80px"></label>
-            </template>
-          </div>
-        </fieldset>
-      </div>
-
-      <div class="r-2" style="margin-bottom:12px">
-        <fieldset>
-          <legend>Hit Points</legend>
-          <div style="display:flex;gap:14px;flex-wrap:wrap;align-items:flex-end">
-            <label class="field">Maximum<input type="number" min="0" x-model="c.hpMax" style="width:70px"></label>
-            <div class="field">Current
-              <div style="display:flex;align-items:center;gap:4px">
-                <button class="noprint" @click="hpDelta(-1)" style="width:28px;font-size:15px"
-                  title="Take 1 damage">−</button>
-                <input type="number" x-model="c.hpCurrent" @change="clampHp()"
-                  style="width:66px;text-align:center;font-weight:700;font-size:16px">
-                <button class="noprint" @click="hpDelta(1)" style="width:28px;font-size:15px" title="Heal 1">+</button>
-              </div>
+      <div class="panel">
+        <div class="r-3" style="margin-bottom: 12px">
+          <fieldset>
+            <legend>Armor Class</legend>
+            <label class="field">AC value<input
+                type="number"
+                x-model="c.ac"
+                style="text-align: center; font-size: 18px; font-weight: 700"
+              ></label>
+          </fieldset>
+          <fieldset style="text-align: center">
+            <legend>Initiative</legend>
+            <div
+              style="font-size: 20px; font-weight: 700"
+              x-text="initiative()"
+            >
             </div>
-            <label class="field">Temporary<input type="number" min="0" x-model="c.hpTemp" style="width:70px"></label>
-          </div>
-          <div style="font-size:11px;color:var(--muted);margin-top:5px">Current is capped at Maximum. The − button spends
-            Temporary HP first. Hit dice live in the Classes section above.</div>
-        </fieldset>
-
-        <fieldset>
-          <legend>Death Saves</legend>
-          <div style="display:flex;gap:6px;align-items:center;margin-bottom:6px">
-            <span style="width:66px;font-size:12px">Successes</span>
-            <template x-for="i in 3" :key="i"><input type="checkbox" :checked="c.deathSucc>=i"
-                @change="c.deathSucc=$event.target.checked?i:i-1" aria-label="Death save success"></template>
-          </div>
-          <div style="display:flex;gap:6px;align-items:center">
-            <span style="width:66px;font-size:12px">Failures</span>
-            <template x-for="i in 3" :key="i"><input type="checkbox" :checked="c.deathFail>=i"
-                @change="c.deathFail=$event.target.checked?i:i-1" aria-label="Death save failure"></template>
-          </div>
-        </fieldset>
-      </div>
-
-      <div class="r-2" style="margin-bottom:12px">
-        <fieldset>
-          <legend>Conditions</legend>
-          <div style="display:flex;gap:5px;flex-wrap:wrap">
-            <template x-for="k in CONDITIONS" :key="k">
-              <button type="button" @click="c.conditions[k]=!c.conditions[k]" class="cond-chip" :class="{ on: !!c.conditions[k] }" x-text="k"></button>
-            </template>
-          </div>
-        </fieldset>
-        <fieldset>
-          <legend>Exhaustion</legend>
-          <div style="display:flex;gap:6px;align-items:center;flex-wrap:wrap">
-            <template x-for="i in 6" :key="i"><span @click="exhaustSet(i)" class="pip pip-ex" :class="{ on: i <= exLevel() }"
-                :title="EXHAUST_FX[i]"></span></template>
-            <span style="font-weight:700;margin-left:4px" x-text="'Level '+(Number(c.exhaustion)||0)"></span>
-          </div>
-          <div style="font-size:11px;color:var(--muted);margin-top:5px"><span
-              x-text="EXHAUST_FX[Number(c.exhaustion)||0]"></span> · Long rest removes one level.</div>
-        </fieldset>
-      </div>
-
-      <fieldset style="margin-bottom:12px">
-        <legend>Senses, Resistances &amp; Immunities</legend>
-        <div class="r-3">
-          <template x-for="g in chipGroups" :key="g.key">
-            <div class="field">
-              <span style="font-weight:600;font-size:12px" x-text="g.label"></span>
-              <div style="display:flex;gap:5px;flex-wrap:wrap;margin:4px 0;min-height:22px">
-                <template x-for="(p,i) in c[g.key]" :key="i">
-                  <span class="chip"><span x-text="p"></span><button class="noprint" type="button" title="Remove"
-                      @click="c[g.key].splice(i,1)">×</button></span>
-                </template>
-              </div>
-              <div class="noprint" style="display:flex;gap:4px">
-                <input x-model="drafts[g.key]" @keydown.enter.prevent="addChip(g.key)" :list="g.dl" :placeholder="g.ph"
-                  style="flex:1;min-width:0">
-                <button type="button" @click="addChip(g.key)">Add</button>
-              </div>
+            <div
+              style="display: flex; gap: 6px; justify-content: center; margin-top: 4px"
+            >
+              <label
+                class="field"
+                style="align-items: center; font-size: 10px; color: var(--muted)"
+              >bonus<input
+                  style="width: 48px; text-align: center"
+                  x-model="c.initBonus"
+                ></label>
+              <label
+                class="field"
+                style="align-items: center; font-size: 10px; color: var(--muted)"
+              >override<input
+                  style="width: 48px; text-align: center"
+                  x-model="c.initOverride"
+                ></label>
             </div>
-          </template>
+          </fieldset>
+          <fieldset>
+            <legend>Speed</legend>
+            <label class="field">Walking (ft)<input
+                type="number"
+                min="0"
+                x-model="c.speeds.walk"
+                style="font-weight: 700"
+              ></label>
+            <div
+              style="display: flex; gap: 10px; flex-wrap: wrap; margin-top: 6px"
+            >
+              <template x-for="sp in SPEED_TYPES" :key="sp[0]">
+                <label class="field-in"><input
+                    type="checkbox"
+                    x-model="c.speedShow[sp[0]]"
+                  > <span
+                    x-text="sp[1]"
+                  ></span></label>
+              </template>
+            </div>
+            <div class="col" style="gap: 5px; margin-top: 6px">
+              <template x-for="sp in SPEED_TYPES" :key="sp[0]">
+                <label class="field-in" x-show="c.speedShow[sp[0]]"><span
+                    x-text="sp[1]+' (ft)'"
+                  ></span><input
+                    type="number"
+                    min="0"
+                    x-model="c.speeds[sp[0]]"
+                    style="width: 80px"
+                  ></label>
+              </template>
+            </div>
+          </fieldset>
         </div>
-      </fieldset>
 
-      <fieldset>
-        <legend>Attacks <span class="legend-note">— bonus = prof + ability +
-            misc</span></legend>
-        <div class="col" style="gap:6px">
-          <template x-for="(a,i) in c.attacks" :key="i">
-            <div class="item-row">
-              <label class="field" style="flex:1;min-width:120px">Name<input x-model="a.name" list="dl-weapon"></label>
-              <label class="field">Ability
-                <select x-model="a.ability">
-                  <option value="">—</option>
-                  <option value="str">STR</option>
-                  <option value="dex">DEX</option>
-                  <option value="con">CON</option>
-                  <option value="int">INT</option>
-                  <option value="wis">WIS</option>
-                  <option value="cha">CHA</option>
-                </select></label>
-              <label class="field" style="align-items:center">Prof.<input type="checkbox" style="width:18px;height:18px"
-                  x-model="a.prof"></label>
-              <label class="field">Misc<input style="width:56px" x-model="a.misc"></label>
-              <label class="field" style="align-items:center">Attack<span
-                  style="font-size:17px;font-weight:700;min-width:38px;text-align:center"
-                  x-text="atkTotal(a)"></span></label>
-              <label class="field">Dmg<input type="number" min="0" style="width:48px" x-model="a.damage.dice"></label>
-              <label class="field">Die
-                <select x-model="a.damage.die">
-                  <option value="4">d4</option>
-                  <option value="6">d6</option>
-                  <option value="8">d8</option>
-                  <option value="10">d10</option>
-                  <option value="12">d12</option>
-                </select></label>
-              <label class="field">+Mod<input style="width:48px" x-model="a.damage.bonus"></label>
-              <label class="field" style="flex:1;min-width:100px">Type<input x-model="a.damage.type"
-                  list="dl-damage"></label>
-              <label class="field" style="align-items:center">Damage<span
-                  style="font-size:15px;font-weight:700;min-width:60px;text-align:center"
-                  x-text="dmgText(a.damage)"></span></label>
-              <button class="noprint" title="Remove" @click="c.attacks.splice(i,1)">Del</button>
+        <div class="r-2" style="margin-bottom: 12px">
+          <fieldset>
+            <legend>Hit Points</legend>
+            <div
+              style="display: flex; gap: 14px; flex-wrap: wrap; align-items: flex-end"
+            >
+              <label class="field">Maximum<input
+                  type="number"
+                  min="0"
+                  x-model="c.hpMax"
+                  style="width: 70px"
+                ></label>
+              <div class="field">
+                Current
+                <div style="display: flex; align-items: center; gap: 4px">
+                  <button
+                    class="noprint"
+                    @click="hpDelta(-1)"
+                    style="width: 28px; font-size: 15px"
+                    title="Take 1 damage"
+                  >
+                    −
+                  </button>
+                  <input
+                    type="number"
+                    x-model="c.hpCurrent"
+                    @change="clampHp()"
+                    style="width: 66px; text-align: center; font-weight: 700; font-size: 16px"
+                  >
+                  <button
+                    class="noprint"
+                    @click="hpDelta(1)"
+                    style="width: 28px; font-size: 15px"
+                    title="Heal 1"
+                  >
+                    +
+                  </button>
+                </div>
+              </div>
+              <label class="field">Temporary<input
+                  type="number"
+                  min="0"
+                  x-model="c.hpTemp"
+                  style="width: 70px"
+                ></label>
             </div>
-          </template>
+            <div style="font-size: 11px; color: var(--muted); margin-top: 5px">
+              Current is capped at Maximum. The − button spends Temporary HP
+              first. Hit dice live in the Classes section above.
+            </div>
+          </fieldset>
+
+          <fieldset>
+            <legend>Death Saves</legend>
+            <div
+              style="display: flex; gap: 6px; align-items: center; margin-bottom: 6px"
+            >
+              <span style="width: 66px; font-size: 12px">Successes</span>
+              <template x-for="i in 3" :key="i"><input
+                  type="checkbox"
+                  :checked="c.deathSucc>=i"
+                  @change="c.deathSucc=$event.target.checked?i:i-1"
+                  aria-label="Death save success"
+                ></template>
+            </div>
+            <div style="display: flex; gap: 6px; align-items: center">
+              <span style="width: 66px; font-size: 12px">Failures</span>
+              <template x-for="i in 3" :key="i"><input
+                  type="checkbox"
+                  :checked="c.deathFail>=i"
+                  @change="c.deathFail=$event.target.checked?i:i-1"
+                  aria-label="Death save failure"
+                ></template>
+            </div>
+          </fieldset>
         </div>
-        <button class="noprint" style="margin-top:7px" @click="c.attacks.push(newAttack())">+ Add attack</button>
-      </fieldset>
-    </div>
 
-    <p class="page-foot noprint">
-      Auto-saves to this browser · Use your browser's Print to export this page as a PDF · Text areas support basic
-      Markdown. Game rules © Wizards of the Coast; this is an original sheet layout.
-    </p>
-  </main>
-</body>
+        <div class="r-2" style="margin-bottom: 12px">
+          <fieldset>
+            <legend>Conditions</legend>
+            <div style="display: flex; gap: 5px; flex-wrap: wrap">
+              <template x-for="k in CONDITIONS" :key="k">
+                <button
+                  type="button"
+                  @click="c.conditions[k]=!c.conditions[k]"
+                  class="cond-chip"
+                  :class="{ on: !!c.conditions[k] }"
+                  x-text="k"
+                >
+                </button>
+              </template>
+            </div>
+          </fieldset>
+          <fieldset>
+            <legend>Exhaustion</legend>
+            <div
+              style="display: flex; gap: 6px; align-items: center; flex-wrap: wrap"
+            >
+              <template x-for="i in 6" :key="i"><span
+                  @click="exhaustSet(i)"
+                  class="pip pip-ex"
+                  :class="{ on: i <= exLevel() }"
+                  :title="EXHAUST_FX[i]"
+                ></span></template>
+              <span
+                style="font-weight: 700; margin-left: 4px"
+                x-text="'Level '+(Number(c.exhaustion)||0)"
+              ></span>
+            </div>
+            <div style="font-size: 11px; color: var(--muted); margin-top: 5px">
+              <span
+                x-text="EXHAUST_FX[Number(c.exhaustion)||0]"
+              ></span> · Long rest removes one level.
+            </div>
+          </fieldset>
+        </div>
 
+        <fieldset style="margin-bottom: 12px">
+          <legend>Senses, Resistances &amp; Immunities</legend>
+          <div class="r-3">
+            <template x-for="g in chipGroups" :key="g.key">
+              <div class="field">
+                <span
+                  style="font-weight: 600; font-size: 12px"
+                  x-text="g.label"
+                ></span>
+                <div
+                  style="display: flex; gap: 5px; flex-wrap: wrap; margin: 4px 0; min-height: 22px"
+                >
+                  <template x-for="(p,i) in c[g.key]" :key="i">
+                    <span class="chip"><span x-text="p"></span><button
+                        class="noprint"
+                        type="button"
+                        title="Remove"
+                        @click="c[g.key].splice(i,1)"
+                      >
+                        ×
+                      </button></span>
+                  </template>
+                </div>
+                <div class="noprint" style="display: flex; gap: 4px">
+                  <input
+                    x-model="drafts[g.key]"
+                    @keydown.enter.prevent="addChip(g.key)"
+                    :list="g.dl"
+                    :placeholder="g.ph"
+                    style="flex: 1; min-width: 0"
+                  >
+                  <button type="button" @click="addChip(g.key)">Add</button>
+                </div>
+              </div>
+            </template>
+          </div>
+        </fieldset>
+
+        <fieldset>
+          <legend>
+            Attacks <span class="legend-note"
+            >— bonus = prof + ability + misc</span>
+          </legend>
+          <div class="col" style="gap: 6px">
+            <template x-for="(a,i) in c.attacks" :key="i">
+              <div class="item-row">
+                <label
+                  class="field"
+                  style="flex: 1; min-width: 120px"
+                >Name<input x-model="a.name" list="dl-weapon"></label>
+                <label class="field">Ability
+                  <select x-model="a.ability">
+                    <option value="">—</option>
+                    <option value="str">STR</option>
+                    <option value="dex">DEX</option>
+                    <option value="con">CON</option>
+                    <option value="int">INT</option>
+                    <option value="wis">WIS</option>
+                    <option value="cha">CHA</option>
+                  </select></label>
+                <label class="field" style="align-items: center">Prof.<input
+                    type="checkbox"
+                    style="width: 18px; height: 18px"
+                    x-model="a.prof"
+                  ></label>
+                <label class="field">Misc<input
+                    style="width: 56px"
+                    x-model="a.misc"
+                  ></label>
+                <label class="field" style="align-items: center">Attack<span
+                    style="font-size: 17px; font-weight: 700; min-width: 38px; text-align: center"
+                    x-text="atkTotal(a)"
+                  ></span></label>
+                <label class="field">Dmg<input
+                    type="number"
+                    min="0"
+                    style="width: 48px"
+                    x-model="a.damage.dice"
+                  ></label>
+                <label class="field">Die
+                  <select x-model="a.damage.die">
+                    <option value="4">d4</option>
+                    <option value="6">d6</option>
+                    <option value="8">d8</option>
+                    <option value="10">d10</option>
+                    <option value="12">d12</option>
+                  </select></label>
+                <label class="field">+Mod<input
+                    style="width: 48px"
+                    x-model="a.damage.bonus"
+                  ></label>
+                <label
+                  class="field"
+                  style="flex: 1; min-width: 100px"
+                >Type<input x-model="a.damage.type" list="dl-damage"></label>
+                <label class="field" style="align-items: center">Damage<span
+                    style="font-size: 15px; font-weight: 700; min-width: 60px; text-align: center"
+                    x-text="dmgText(a.damage)"
+                  ></span></label>
+                <button
+                  class="noprint"
+                  title="Remove"
+                  @click="c.attacks.splice(i,1)"
+                >
+                  Del
+                </button>
+              </div>
+            </template>
+          </div>
+          <button
+            class="noprint"
+            style="margin-top: 7px"
+            @click="c.attacks.push(newAttack())"
+          >
+            + Add attack
+          </button>
+        </fieldset>
+      </div>
+
+      <p class="page-foot noprint">
+        Auto-saves to this browser · Use your browser's Print to export this
+        page as a PDF · Text areas support basic Markdown. Game rules © Wizards
+        of the Coast; this is an original sheet layout.
+      </p>
+    </main>
+  </body>
 </html>

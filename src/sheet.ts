@@ -15,14 +15,11 @@ import {
   SPEED_TYPES,
   warlockLevel,
 } from "./rules";
+import { type Character, STORAGE_KEY } from "./model/types";
 import {
-  type Character,
-  STORAGE_KEY,
-} from "./model/types";
-import {
-  newDamageText,
   newAttack,
   newClass,
+  newDamageText,
   newEquip,
   newFeature,
   newInnate,
@@ -295,8 +292,11 @@ export function sheet() {
     },
     totalWeight() {
       return (Math.round(
-        this.c.equipment.reduce((n: number, e: any) =>
-          n + (Number(e.qty) || 1) * (Number(e.weight) || 0), 0) * 100,
+        this.c.equipment.reduce(
+          (n: number, e: any) =>
+            n + (Number(e.qty) || 1) * (Number(e.weight) || 0),
+          0,
+        ) * 100,
       ) / 100) + " lb";
     },
     capacity() {
@@ -415,11 +415,10 @@ export function sheet() {
       });
       const a = document.createElement("a");
       a.href = URL.createObjectURL(blob);
-      a.download =
-        ((String(this.c.name || "").trim() || "character").replace(
-          /[^\w\- ]+/g,
-          "",
-        )) + ".json";
+      a.download = ((String(this.c.name || "").trim() || "character").replace(
+        /[^\w\- ]+/g,
+        "",
+      )) + ".json";
       a.click();
       setTimeout(() => URL.revokeObjectURL(a.href), 5000);
     },

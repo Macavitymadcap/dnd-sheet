@@ -1,4 +1,4 @@
-import { Metric, Damage, Character, STORAGE_KEY } from "./types";
+import { Character, Damage, Metric, STORAGE_KEY } from "./types";
 import { ClassEntry } from "../rules";
 
 export function metricDefaults(): Metric {
@@ -106,7 +106,9 @@ export function emptySpellLevels() {
   return a;
 }
 
-export function newDamageText(damageText: Partial<Damage> | null | undefined): string {
+export function newDamageText(
+  damageText: Partial<Damage> | null | undefined,
+): string {
   if (!damageText || typeof damageText !== "object") return "—";
   const cnt = Number(damageText.dice) || 0;
   let s = cnt > 0 ? cnt + "d" + (damageText.die || "6") : "";
@@ -196,8 +198,7 @@ export function defaults() {
 export function save(character: Character): void {
   try {
     localStorage.setItem(STORAGE_KEY, JSON.stringify(character));
-  } catch (e) { 
+  } catch (e) {
     console.error("Error saving character to localStorage:", e);
-   }
+  }
 }
-
