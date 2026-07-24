@@ -4,12 +4,14 @@
 // Alpine never has to reach across a shadow boundary — the page
 // content stays Alpine's, the chrome is the components'.
 
+import { OptionList } from "./OptionList";
 import { SheetFooter } from "./SheetFooter";
 import { SheetNav } from "./SheetNav";
 import { SheetToolbar } from "./SheetToolbar";
 import { ThemeToggle } from "./ThemeToggle";
 
 const components = {
+  "option-list": OptionList,
   "sheet-footer": SheetFooter,
   "sheet-nav": SheetNav,
   "sheet-toolbar": SheetToolbar,

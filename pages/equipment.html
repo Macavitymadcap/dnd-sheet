@@ -4,17 +4,7 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Equipment & Gold · D&amp;D Character Sheet</title>
-    <script>
-      try {
-        var t = localStorage.getItem("dnd-theme");
-        document.documentElement.dataset.theme = t ||
-          (matchMedia("(prefers-color-scheme: dark)").matches
-            ? "dark"
-            : "light");
-      } catch (e) {
-        console.error("Error setting theme:", e);
-      }
-    </script>
+    <script src="../src/lib/theme-init.ts"></script>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link
@@ -37,80 +27,8 @@
     >
       <sheet-nav current="equipment"></sheet-nav>
 
-      <datalist id="dl-item">
-        <option value="Backpack"></option>
-        <option value="Bedroll"></option>
-        <option value="Rope (50 ft)"></option>
-        <option value="Torch"></option>
-        <option value="Rations (1 day)"></option>
-        <option value="Waterskin"></option>
-        <option value="Tinderbox"></option>
-        <option value="Crowbar"></option>
-        <option value="Grappling Hook"></option>
-        <option value="Lantern (hooded)"></option>
-        <option value="Oil (flask)"></option>
-        <option value="Potion of Healing"></option>
-        <option value="Spellbook"></option>
-        <option value="Component Pouch"></option>
-        <option value="Arcane Focus"></option>
-        <option value="Holy Symbol"></option>
-        <option value="Druidic Focus"></option>
-        <option value="Healer's Kit"></option>
-        <option value="Thieves' Tools"></option>
-        <option value="Caltrops (bag of 20)"></option>
-        <option value="Ball Bearings (bag of 1,000)"></option>
-        <option value="Chain (10 ft)"></option>
-        <option value="Hammer"></option>
-        <option value="Piton"></option>
-        <option value="Shovel"></option>
-        <option value="Steel Mirror"></option>
-        <option value="Manacles"></option>
-        <option value="Explorer's Pack"></option>
-        <option value="Dungeoneer's Pack"></option>
-        <option value="Burglar's Pack"></option>
-        <option value="Diplomat's Pack"></option>
-        <option value="Priest's Pack"></option>
-        <option value="Scholar's Pack"></option>
-        <option value="Entertainer's Pack"></option>
-        <option value="Arrows (20)"></option>
-        <option value="Crossbow Bolts (20)"></option>
-        <option value="Padded Armor"></option>
-        <option value="Leather Armor"></option>
-        <option value="Studded Leather Armor"></option>
-        <option value="Hide Armor"></option>
-        <option value="Chain Shirt"></option>
-        <option value="Scale Mail"></option>
-        <option value="Breastplate"></option>
-        <option value="Half Plate"></option>
-        <option value="Ring Mail"></option>
-        <option value="Chain Mail"></option>
-        <option value="Splint Armor"></option>
-        <option value="Plate Armor"></option>
-        <option value="Shield"></option>
-        <option value="Club"></option>
-        <option value="Dagger"></option>
-        <option value="Handaxe"></option>
-        <option value="Javelin"></option>
-        <option value="Mace"></option>
-        <option value="Quarterstaff"></option>
-        <option value="Spear"></option>
-        <option value="Light Crossbow"></option>
-        <option value="Shortbow"></option>
-        <option value="Battleaxe"></option>
-        <option value="Glaive"></option>
-        <option value="Greataxe"></option>
-        <option value="Greatsword"></option>
-        <option value="Halberd"></option>
-        <option value="Longsword"></option>
-        <option value="Maul"></option>
-        <option value="Rapier"></option>
-        <option value="Scimitar"></option>
-        <option value="Shortsword"></option>
-        <option value="Warhammer"></option>
-        <option value="Hand Crossbow"></option>
-        <option value="Heavy Crossbow"></option>
-        <option value="Longbow"></option>
-      </datalist>
+      <option-list for="dl-item"></option-list>
+      
       <sheet-toolbar></sheet-toolbar>
 
       <div class="panel">

@@ -4,17 +4,7 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Spellcasting · D&amp;D Character Sheet</title>
-    <script>
-      try {
-        var t = localStorage.getItem("dnd-theme");
-        document.documentElement.dataset.theme = t ||
-          (matchMedia("(prefers-color-scheme: dark)").matches
-            ? "dark"
-            : "light");
-      } catch (e) {
-        console.error("Error setting theme:", e);
-      }
-    </script>
+    <script src="../src/lib/theme-init.ts"></script>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link
@@ -37,32 +27,9 @@
     >
       <sheet-nav current="spells"></sheet-nav>
 
-      <datalist id="dl-school">
-        <option value="Abjuration"></option>
-        <option value="Conjuration"></option>
-        <option value="Divination"></option>
-        <option value="Enchantment"></option>
-        <option value="Evocation"></option>
-        <option value="Illusion"></option>
-        <option value="Necromancy"></option>
-        <option value="Transmutation"></option>
-      </datalist>
+      <option-list for="dl-school"></option-list>
+      <option-list for="dl-damage"></option-list>
 
-      <datalist id="dl-damage">
-        <option value="Acid"></option>
-        <option value="Bludgeoning"></option>
-        <option value="Cold"></option>
-        <option value="Fire"></option>
-        <option value="Force"></option>
-        <option value="Lightning"></option>
-        <option value="Necrotic"></option>
-        <option value="Piercing"></option>
-        <option value="Poison"></option>
-        <option value="Psychic"></option>
-        <option value="Radiant"></option>
-        <option value="Slashing"></option>
-        <option value="Thunder"></option>
-      </datalist>
       <sheet-toolbar></sheet-toolbar>
 
       <div class="panel">
