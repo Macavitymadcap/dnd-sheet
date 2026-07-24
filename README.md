@@ -17,7 +17,7 @@ Other scripts:
 ```sh
 bun run build      # static bundle in dist/ — deployable to any static host
 bun run typecheck  # tsc --noEmit
-bun test scripts/  # logic smoke tests + headless page-render tests
+bun test           # logic smoke tests + headless page-render tests
 ```
 
 `bun run dev` uses Bun's HTML imports: each page's
