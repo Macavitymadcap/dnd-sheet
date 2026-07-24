@@ -4,7 +4,7 @@
 // Alpine never has to reach across a shadow boundary — the page
 // content stays Alpine's, the chrome is the components'.
 
-import { STORAGE_KEY, THEME_KEY } from '../model';
+import { STORAGE_KEY, THEME_KEY } from '../model/types';
 
 const PAGES: [string, string, string][] = [
   ['index', './index.html', 'Character'],
@@ -75,7 +75,7 @@ class SheetToolbar extends HTMLElement {
       window.dispatchEvent(new CustomEvent(act));
     });
     file.addEventListener('change', async () => {
-      const f = file.files && file.files[0];
+      const f = file.files?.[0];
       if (!f) return;
       const text = await f.text();
       window.dispatchEvent(new CustomEvent('sheet-import', { detail: text }));

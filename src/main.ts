@@ -1,7 +1,7 @@
 import Alpine from 'alpinejs';
 import { registerComponents } from './components';
 import { sheet } from './sheet';
-import { THEME_KEY } from './model';
+import { THEME_KEY } from './model/types';
 
 // Apply the theme as early as the bundle runs (each page's inline head
 // script has already set it pre-paint; this covers first visits and

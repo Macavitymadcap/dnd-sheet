@@ -6,7 +6,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Character · D&amp;D Character Sheet</title>
   <script>
-    try { var t = localStorage.getItem('dnd-theme'); document.documentElement.dataset.theme = t || (matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light'); } catch (e) { }
+    try { var t = localStorage.getItem('dnd-theme'); document.documentElement.dataset.theme = t || (matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light'); } catch (e) { console.warn('Failed to read theme from localStorage', e); }
   </script>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -141,7 +141,7 @@
         </fieldset>
       </div>
       <div class="abil-grid">
-        <template x-for="ab in ABILS" :key="ab[0]">
+        <template x-for="ab in ABILITIES" :key="ab[0]">
           <fieldset>
             <legend x-text="ab[1]"></legend>
             <div style="display:flex;align-items:center;gap:14px">
