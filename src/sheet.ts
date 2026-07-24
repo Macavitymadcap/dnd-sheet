@@ -2,8 +2,8 @@
 // of the sheet; they all share this component and the saved character.
 
 import {
-  ABILS, SKILLS, SPEED_TYPES, CONDITIONS, EXHAUST_FX, BG_FIELDS,
-  MC_SLOTS, PACT, CLASS_INFO, levelFromXP, casterLevel, warlockLevel,
+  ABILITIES, SKILLS, SPEED_TYPES, CONDITIONS, EXHAUST_EFFECTS, BACKGROUND_FIELDS,
+  MULTICLASS_SLOTS, PACT, CLASS_INFO, levelFromXP, casterLevel, warlockLevel,
 } from './rules';
 import {
   STORAGE_KEY, load, save, dmgText,
@@ -26,7 +26,7 @@ export function sheet() {
     ],
 
     // Rules data and factories the templates reference directly.
-    ABILS, SPEED_TYPES, CONDITIONS, EXHAUST_FX, BG_FIELDS,
+    ABILS: ABILITIES, SPEED_TYPES, CONDITIONS, EXHAUST_FX: EXHAUST_EFFECTS, BG_FIELDS: BACKGROUND_FIELDS,
     newFeature, newEquip, newInnate, newAttack, newSpell, dmgText,
     mdToHtml,
 
@@ -186,7 +186,7 @@ export function sheet() {
     slotTotal(lvl: number) {
       if (lvl === 0) return 0;
       if (this.autoOn()) {
-        const row = MC_SLOTS[Math.min(20, Math.max(1, this.casterLvl()))] || [];
+        const row = MULTICLASS_SLOTS[Math.min(20, Math.max(1, this.casterLvl()))] || [];
         return row[lvl - 1] || 0;
       }
       return Number(this.c.spellLevels[lvl].slotsTotal) || 0;

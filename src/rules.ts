@@ -2,7 +2,7 @@
 
 export type AbilityKey = 'str' | 'dex' | 'con' | 'int' | 'wis' | 'cha';
 
-export const ABILS: [AbilityKey, string][] = [
+export const ABILITIES: [AbilityKey, string][] = [
   ['str', 'Strength'], ['dex', 'Dexterity'], ['con', 'Constitution'],
   ['int', 'Intelligence'], ['wis', 'Wisdom'], ['cha', 'Charisma'],
 ];
@@ -29,9 +29,9 @@ export const SPEED_TYPES: [string, string][] = [['fly', 'Fly'], ['swim', 'Swim']
 
 export const CONDITIONS = ['Blinded', 'Charmed', 'Deafened', 'Frightened', 'Grappled', 'Incapacitated', 'Invisible', 'Paralyzed', 'Petrified', 'Poisoned', 'Prone', 'Restrained', 'Stunned', 'Unconscious'];
 
-export const EXHAUST_FX = ['No effect', '1: Disadvantage on ability checks', '2: Speed halved', '3: Disadvantage on attack rolls & saving throws', '4: Hit point maximum halved', '5: Speed reduced to 0', '6: Death'];
+export const EXHAUST_EFFECTS = ['No effect', '1: Disadvantage on ability checks', '2: Speed halved', '3: Disadvantage on attack rolls & saving throws', '4: Hit point maximum halved', '5: Speed reduced to 0', '6: Death'];
 
-export const BG_FIELDS: [string, string][] = [['personality', 'Personality Traits'], ['ideals', 'Ideals'], ['bonds', 'Bonds'], ['flaws', 'Flaws']];
+export const BACKGROUND_FIELDS: [string, string][] = [['personality', 'Personality Traits'], ['ideals', 'Ideals'], ['bonds', 'Bonds'], ['flaws', 'Flaws']];
 
 export type CasterKind = 'none' | 'full' | 'half' | 'third' | 'artificer' | 'pact';
 
@@ -46,7 +46,7 @@ export const CLASS_INFO: Record<string, { hitDie: string; caster: CasterKind }> 
 };
 
 // Multiclass spell slot table: MC_SLOTS[casterLevel] = slots for spell levels 1–9.
-export const MC_SLOTS: (number[] | null)[] = [null,
+export const MULTICLASS_SLOTS: (number[] | null)[] = [null,
   [2, 0, 0, 0, 0, 0, 0, 0, 0], [3, 0, 0, 0, 0, 0, 0, 0, 0], [4, 2, 0, 0, 0, 0, 0, 0, 0], [4, 3, 0, 0, 0, 0, 0, 0, 0], [4, 3, 2, 0, 0, 0, 0, 0, 0],
   [4, 3, 3, 0, 0, 0, 0, 0, 0], [4, 3, 3, 1, 0, 0, 0, 0, 0], [4, 3, 3, 2, 0, 0, 0, 0, 0], [4, 3, 3, 3, 1, 0, 0, 0, 0], [4, 3, 3, 3, 2, 0, 0, 0, 0],
   [4, 3, 3, 3, 2, 1, 0, 0, 0], [4, 3, 3, 3, 2, 1, 0, 0, 0], [4, 3, 3, 3, 2, 1, 1, 0, 0], [4, 3, 3, 3, 2, 1, 1, 0, 0], [4, 3, 3, 3, 2, 1, 1, 1, 0],
