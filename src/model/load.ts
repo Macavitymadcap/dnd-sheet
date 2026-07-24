@@ -133,10 +133,10 @@ function getClasses(character: any) {
       hitDie: new RegExp(/\d+/).exec(String(character.hitDieType || "")) || (character.hitDieType = "8"),
       caster: "none",
     };
-
-  if (!Array.isArray(character.classes) || !character.classes.length) {
-    const nm = String(character.clazz || "").replace(/\s*\d+\s*$/, "").trim();
-    const info = CLASS_INFO[nm] || classInfo;
+    
+    if (!Array.isArray(character.classes) || !character.classes.length) {
+    const className = getClassName(character);
+    const info = CLASS_INFO[className] || classInfo;
     
     const level = levelFromXP(character.xp) || 1;
 
@@ -145,10 +145,10 @@ function getClasses(character: any) {
       ? Number(character.hitDiceRemaining)
       : level;
       
-    character.classes = nm
+    character.classes = className
       ? [
         Object.assign(newClass(), {
-          name: nm,
+          name: className,
           level: level,
           hitDie: info.hitDie,
           caster: info.caster,
@@ -159,6 +159,13 @@ function getClasses(character: any) {
   }
 
   character.classes = (character.classes || []).map((x: any) => Object.assign(newClass(), x));
+}
+
+function getClassName(character: any) {
+  let s = String(character.clazz ?? "").trimEnd();
+  let end = s.length;
+  while (end > 0 && s[end - 1] >= "0" && s[end - 1] <= "9") end--;
+  return s.slice(0, end).trim();
 }
 
 function getInnateSpells(character: any) {
