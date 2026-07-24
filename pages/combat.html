@@ -11,7 +11,9 @@
           (matchMedia("(prefers-color-scheme: dark)").matches
             ? "dark"
             : "light");
-      } catch (e) {}
+      } catch (e) {
+        console.error("Error setting theme:", e);
+      }
     </script>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -459,11 +461,7 @@
         </fieldset>
       </div>
 
-      <p class="page-foot noprint">
-        Auto-saves to this browser · Use your browser's Print to export this
-        page as a PDF · Text areas support basic Markdown. Game rules © Wizards
-        of the Coast; this is an original sheet layout.
-      </p>
+     <sheet-footer></sheet-footer> 
     </main>
   </body>
 </html>
