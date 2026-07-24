@@ -4,17 +4,7 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Background · D&amp;D Character Sheet</title>
-    <script>
-      try {
-        var t = localStorage.getItem("dnd-theme");
-        document.documentElement.dataset.theme = t ||
-          (matchMedia("(prefers-color-scheme: dark)").matches
-            ? "dark"
-            : "light");
-      } catch (e) {
-        console.error("Error setting theme:", e);
-      }
-    </script>
+    <script src="../src/lib/theme-init.ts"></script>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link

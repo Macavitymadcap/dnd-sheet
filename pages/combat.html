@@ -4,17 +4,7 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Attacks & Defence · D&amp;D Character Sheet</title>
-    <script>
-      try {
-        var t = localStorage.getItem("dnd-theme");
-        document.documentElement.dataset.theme = t ||
-          (matchMedia("(prefers-color-scheme: dark)").matches
-            ? "dark"
-            : "light");
-      } catch (e) {
-        console.error("Error setting theme:", e);
-      }
-    </script>
+    <script src="../src/lib/theme-init.ts"></script>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link
@@ -37,121 +27,12 @@
     >
       <sheet-nav current="combat"></sheet-nav>
 
-      <datalist id="dl-damage">
-        <option value="Acid"></option>
-        <option value="Bludgeoning"></option>
-        <option value="Cold"></option>
-        <option value="Fire"></option>
-        <option value="Force"></option>
-        <option value="Lightning"></option>
-        <option value="Necrotic"></option>
-        <option value="Piercing"></option>
-        <option value="Poison"></option>
-        <option value="Psychic"></option>
-        <option value="Radiant"></option>
-        <option value="Slashing"></option>
-        <option value="Thunder"></option>
-      </datalist>
+      <option-list for="dl-damage"></option-list>
+      <option-list for="dl-weapon"></option-list>
+      <option-list for="dl-senses"></option-list>
+      <option-list for="dl-resist"></option-list>
+      <option-list for="dl-immune"></option-list>
 
-      <datalist id="dl-weapon">
-        <option value="Unarmed Strike"></option>
-        <option value="Club"></option>
-        <option value="Dagger"></option>
-        <option value="Greatclub"></option>
-        <option value="Handaxe"></option>
-        <option value="Javelin"></option>
-        <option value="Light Hammer"></option>
-        <option value="Mace"></option>
-        <option value="Quarterstaff"></option>
-        <option value="Sickle"></option>
-        <option value="Spear"></option>
-        <option value="Light Crossbow"></option>
-        <option value="Dart"></option>
-        <option value="Shortbow"></option>
-        <option value="Sling"></option>
-        <option value="Battleaxe"></option>
-        <option value="Flail"></option>
-        <option value="Glaive"></option>
-        <option value="Greataxe"></option>
-        <option value="Greatsword"></option>
-        <option value="Halberd"></option>
-        <option value="Lance"></option>
-        <option value="Longsword"></option>
-        <option value="Maul"></option>
-        <option value="Morningstar"></option>
-        <option value="Pike"></option>
-        <option value="Rapier"></option>
-        <option value="Scimitar"></option>
-        <option value="Shortsword"></option>
-        <option value="Trident"></option>
-        <option value="War Pick"></option>
-        <option value="Warhammer"></option>
-        <option value="Whip"></option>
-        <option value="Blowgun"></option>
-        <option value="Hand Crossbow"></option>
-        <option value="Heavy Crossbow"></option>
-        <option value="Longbow"></option>
-        <option value="Net"></option>
-      </datalist>
-
-      <datalist id="dl-senses">
-        <option value="Darkvision 60 ft"></option>
-        <option value="Darkvision 120 ft"></option>
-        <option value="Superior Darkvision 120 ft"></option>
-        <option value="Blindsight 30 ft"></option>
-        <option value="Blindsight 60 ft"></option>
-        <option value="Tremorsense 60 ft"></option>
-        <option value="Truesight 60 ft"></option>
-        <option value="Devil's Sight 120 ft"></option>
-      </datalist>
-
-      <datalist id="dl-resist">
-        <option value="Acid"></option>
-        <option value="Bludgeoning"></option>
-        <option value="Cold"></option>
-        <option value="Fire"></option>
-        <option value="Force"></option>
-        <option value="Lightning"></option>
-        <option value="Necrotic"></option>
-        <option value="Piercing"></option>
-        <option value="Poison"></option>
-        <option value="Psychic"></option>
-        <option value="Radiant"></option>
-        <option value="Slashing"></option>
-        <option value="Thunder"></option>
-        <option value="Nonmagical bludgeoning, piercing & slashing"></option>
-      </datalist>
-
-      <datalist id="dl-immune">
-        <option value="Acid"></option>
-        <option value="Bludgeoning"></option>
-        <option value="Cold"></option>
-        <option value="Fire"></option>
-        <option value="Force"></option>
-        <option value="Lightning"></option>
-        <option value="Necrotic"></option>
-        <option value="Piercing"></option>
-        <option value="Poison"></option>
-        <option value="Psychic"></option>
-        <option value="Radiant"></option>
-        <option value="Slashing"></option>
-        <option value="Thunder"></option>
-        <option value="Blinded"></option>
-        <option value="Charmed"></option>
-        <option value="Deafened"></option>
-        <option value="Frightened"></option>
-        <option value="Grappled"></option>
-        <option value="Incapacitated"></option>
-        <option value="Paralyzed"></option>
-        <option value="Petrified"></option>
-        <option value="Poisoned (condition)"></option>
-        <option value="Prone"></option>
-        <option value="Restrained"></option>
-        <option value="Stunned"></option>
-        <option value="Unconscious"></option>
-        <option value="Disease"></option>
-        <option value="Magical sleep"></option>
-      </datalist>
       <sheet-toolbar></sheet-toolbar>
 
       <div class="panel">

@@ -4,17 +4,7 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Traits & Proficiencies · D&amp;D Character Sheet</title>
-    <script>
-      try {
-        var t = localStorage.getItem("dnd-theme");
-        document.documentElement.dataset.theme = t ||
-          (matchMedia("(prefers-color-scheme: dark)").matches
-            ? "dark"
-            : "light");
-      } catch (e) {
-        console.error("Error setting theme:", e);
-      }
-    </script>
+    <script src="../src/lib/theme-init.ts"></script>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link
@@ -37,121 +27,8 @@
     >
       <sheet-nav current="traits"></sheet-nav>
 
-      <datalist id="dl-prof">
-        <option value="Common"></option>
-        <option value="Dwarvish"></option>
-        <option value="Elvish"></option>
-        <option value="Giant"></option>
-        <option value="Gnomish"></option>
-        <option value="Goblin"></option>
-        <option value="Halfling"></option>
-        <option value="Orc"></option>
-        <option value="Abyssal"></option>
-        <option value="Celestial"></option>
-        <option value="Draconic"></option>
-        <option value="Deep Speech"></option>
-        <option value="Infernal"></option>
-        <option value="Primordial"></option>
-        <option value="Sylvan"></option>
-        <option value="Undercommon"></option>
-        <option value="Thieves' Cant"></option>
-        <option value="Druidic"></option>
-        <option value="Light Armor"></option>
-        <option value="Medium Armor"></option>
-        <option value="Heavy Armor"></option>
-        <option value="Shields"></option>
-        <option value="Simple Weapons"></option>
-        <option value="Martial Weapons"></option>
-        <option value="Padded Armor"></option>
-        <option value="Leather Armor"></option>
-        <option value="Studded Leather Armor"></option>
-        <option value="Hide Armor"></option>
-        <option value="Chain Shirt"></option>
-        <option value="Scale Mail"></option>
-        <option value="Breastplate"></option>
-        <option value="Half Plate"></option>
-        <option value="Ring Mail"></option>
-        <option value="Chain Mail"></option>
-        <option value="Splint Armor"></option>
-        <option value="Plate Armor"></option>
-        <option value="Club"></option>
-        <option value="Dagger"></option>
-        <option value="Greatclub"></option>
-        <option value="Handaxe"></option>
-        <option value="Javelin"></option>
-        <option value="Light Hammer"></option>
-        <option value="Mace"></option>
-        <option value="Quarterstaff"></option>
-        <option value="Sickle"></option>
-        <option value="Spear"></option>
-        <option value="Light Crossbow"></option>
-        <option value="Dart"></option>
-        <option value="Shortbow"></option>
-        <option value="Sling"></option>
-        <option value="Battleaxe"></option>
-        <option value="Flail"></option>
-        <option value="Glaive"></option>
-        <option value="Greataxe"></option>
-        <option value="Greatsword"></option>
-        <option value="Halberd"></option>
-        <option value="Lance"></option>
-        <option value="Longsword"></option>
-        <option value="Maul"></option>
-        <option value="Morningstar"></option>
-        <option value="Pike"></option>
-        <option value="Rapier"></option>
-        <option value="Scimitar"></option>
-        <option value="Shortsword"></option>
-        <option value="Trident"></option>
-        <option value="War Pick"></option>
-        <option value="Warhammer"></option>
-        <option value="Whip"></option>
-        <option value="Blowgun"></option>
-        <option value="Hand Crossbow"></option>
-        <option value="Heavy Crossbow"></option>
-        <option value="Longbow"></option>
-        <option value="Net"></option>
-        <option value="Thieves' Tools"></option>
-        <option value="Herbalism Kit"></option>
-        <option value="Disguise Kit"></option>
-        <option value="Forgery Kit"></option>
-        <option value="Poisoner's Kit"></option>
-        <option value="Healer's Kit"></option>
-        <option value="Alchemist's Supplies"></option>
-        <option value="Brewer's Supplies"></option>
-        <option value="Calligrapher's Supplies"></option>
-        <option value="Carpenter's Tools"></option>
-        <option value="Cartographer's Tools"></option>
-        <option value="Cobbler's Tools"></option>
-        <option value="Cook's Utensils"></option>
-        <option value="Glassblower's Tools"></option>
-        <option value="Jeweler's Tools"></option>
-        <option value="Leatherworker's Tools"></option>
-        <option value="Mason's Tools"></option>
-        <option value="Painter's Supplies"></option>
-        <option value="Potter's Tools"></option>
-        <option value="Smith's Tools"></option>
-        <option value="Tinker's Tools"></option>
-        <option value="Weaver's Tools"></option>
-        <option value="Woodcarver's Tools"></option>
-        <option value="Navigator's Tools"></option>
-        <option value="Vehicles (Land)"></option>
-        <option value="Vehicles (Water)"></option>
-        <option value="Dice Set"></option>
-        <option value="Dragonchess Set"></option>
-        <option value="Playing Card Set"></option>
-        <option value="Three-Dragon Ante Set"></option>
-        <option value="Bagpipes"></option>
-        <option value="Drum"></option>
-        <option value="Dulcimer"></option>
-        <option value="Flute"></option>
-        <option value="Horn"></option>
-        <option value="Lute"></option>
-        <option value="Lyre"></option>
-        <option value="Pan Flute"></option>
-        <option value="Shawm"></option>
-        <option value="Viol"></option>
-      </datalist>
+      <option-list for="dl-prof"></option-list>
+      
       <sheet-toolbar></sheet-toolbar>
 
       <div class="panel">
