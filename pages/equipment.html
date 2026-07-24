@@ -1,245 +1,371 @@
 <!DOCTYPE html>
 <html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Equipment & Gold · D&amp;D Character Sheet</title>
+    <script>
+      try {
+        var t = localStorage.getItem("dnd-theme");
+        document.documentElement.dataset.theme = t ||
+          (matchMedia("(prefers-color-scheme: dark)").matches
+            ? "dark"
+            : "light");
+      } catch (e) {
+        console.error("Error setting theme:", e);
+      }
+    </script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+      rel="stylesheet"
+      href="https://fonts.googleapis.com/css2?family=Alegreya:ital,wght@0,400;0,500;0,700;1,400&family=Cinzel:wght@500;600;700&display=swap"
+    >
+    <link rel="stylesheet" href="../styles.css">
+    <script type="module" src="../src/main.ts"></script>
+  </head>
 
-<head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Equipment & Gold · D&amp;D Character Sheet</title>
-  <script>
-    try { var t = localStorage.getItem('dnd-theme'); document.documentElement.dataset.theme = t || (matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light'); } catch (e) { }
-  </script>
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link rel="stylesheet"
-    href="https://fonts.googleapis.com/css2?family=Alegreya:ital,wght@0,400;0,500;0,700;1,400&family=Cinzel:wght@500;600;700&display=swap">
-  <link rel="stylesheet" href="../styles.css">
-  <script type="module" src="../src/main.ts"></script>
-</head>
+  <body>
+    <main
+      class="wrap"
+      x-data="sheet()"
+      x-cloak
+      @sheet-short-rest.window="shortRest()"
+      @sheet-long-rest.window="longRest()"
+      @sheet-export.window="exportJson()"
+      @sheet-import.window="importJsonText($event.detail)"
+    >
+      <sheet-nav current="equipment"></sheet-nav>
 
-<body>
-  <main class="wrap" x-data="sheet()" x-cloak @sheet-short-rest.window="shortRest()"
-    @sheet-long-rest.window="longRest()" @sheet-export.window="exportJson()"
-    @sheet-import.window="importJsonText($event.detail)">
+      <datalist id="dl-item">
+        <option value="Backpack"></option>
+        <option value="Bedroll"></option>
+        <option value="Rope (50 ft)"></option>
+        <option value="Torch"></option>
+        <option value="Rations (1 day)"></option>
+        <option value="Waterskin"></option>
+        <option value="Tinderbox"></option>
+        <option value="Crowbar"></option>
+        <option value="Grappling Hook"></option>
+        <option value="Lantern (hooded)"></option>
+        <option value="Oil (flask)"></option>
+        <option value="Potion of Healing"></option>
+        <option value="Spellbook"></option>
+        <option value="Component Pouch"></option>
+        <option value="Arcane Focus"></option>
+        <option value="Holy Symbol"></option>
+        <option value="Druidic Focus"></option>
+        <option value="Healer's Kit"></option>
+        <option value="Thieves' Tools"></option>
+        <option value="Caltrops (bag of 20)"></option>
+        <option value="Ball Bearings (bag of 1,000)"></option>
+        <option value="Chain (10 ft)"></option>
+        <option value="Hammer"></option>
+        <option value="Piton"></option>
+        <option value="Shovel"></option>
+        <option value="Steel Mirror"></option>
+        <option value="Manacles"></option>
+        <option value="Explorer's Pack"></option>
+        <option value="Dungeoneer's Pack"></option>
+        <option value="Burglar's Pack"></option>
+        <option value="Diplomat's Pack"></option>
+        <option value="Priest's Pack"></option>
+        <option value="Scholar's Pack"></option>
+        <option value="Entertainer's Pack"></option>
+        <option value="Arrows (20)"></option>
+        <option value="Crossbow Bolts (20)"></option>
+        <option value="Padded Armor"></option>
+        <option value="Leather Armor"></option>
+        <option value="Studded Leather Armor"></option>
+        <option value="Hide Armor"></option>
+        <option value="Chain Shirt"></option>
+        <option value="Scale Mail"></option>
+        <option value="Breastplate"></option>
+        <option value="Half Plate"></option>
+        <option value="Ring Mail"></option>
+        <option value="Chain Mail"></option>
+        <option value="Splint Armor"></option>
+        <option value="Plate Armor"></option>
+        <option value="Shield"></option>
+        <option value="Club"></option>
+        <option value="Dagger"></option>
+        <option value="Handaxe"></option>
+        <option value="Javelin"></option>
+        <option value="Mace"></option>
+        <option value="Quarterstaff"></option>
+        <option value="Spear"></option>
+        <option value="Light Crossbow"></option>
+        <option value="Shortbow"></option>
+        <option value="Battleaxe"></option>
+        <option value="Glaive"></option>
+        <option value="Greataxe"></option>
+        <option value="Greatsword"></option>
+        <option value="Halberd"></option>
+        <option value="Longsword"></option>
+        <option value="Maul"></option>
+        <option value="Rapier"></option>
+        <option value="Scimitar"></option>
+        <option value="Shortsword"></option>
+        <option value="Warhammer"></option>
+        <option value="Hand Crossbow"></option>
+        <option value="Heavy Crossbow"></option>
+        <option value="Longbow"></option>
+      </datalist>
+      <sheet-toolbar></sheet-toolbar>
 
-    <sheet-nav current="equipment"></sheet-nav>
+      <div class="panel">
+        <div class="r-2" style="margin-bottom: 12px">
+          <fieldset>
+            <legend>Coins</legend>
+            <div style="display: flex; gap: 8px; flex-wrap: wrap">
+              <label class="field" style="font-size: 11px">CP<input
+                  type="number"
+                  style="width: 66px"
+                  x-model="c.coins.cp"
+                ></label>
+              <label class="field" style="font-size: 11px">SP<input
+                  type="number"
+                  style="width: 66px"
+                  x-model="c.coins.sp"
+                ></label>
+              <label class="field" style="font-size: 11px">EP<input
+                  type="number"
+                  style="width: 66px"
+                  x-model="c.coins.ep"
+                ></label>
+              <label class="field" style="font-size: 11px">GP<input
+                  type="number"
+                  style="width: 66px"
+                  x-model="c.coins.gp"
+                ></label>
+              <label class="field" style="font-size: 11px">PP<input
+                  type="number"
+                  style="width: 66px"
+                  x-model="c.coins.pp"
+                ></label>
+            </div>
+          </fieldset>
+          <fieldset>
+            <legend>
+              Attunement <span class="legend-note"
+              >— <span
+                  x-text="attunedCount()"
+                ></span> / 3 slots used</span>
+            </legend>
+            <div class="col" style="gap: 5px">
+              <template x-for="i in 3" :key="i">
+                <input
+                  x-model="c.attuned[i-1]"
+                  :placeholder="'Attuned magic item '+i"
+                >
+              </template>
+            </div>
+          </fieldset>
+        </div>
 
-    <datalist id="dl-item">
-      <option value="Backpack"></option>
-      <option value="Bedroll"></option>
-      <option value="Rope (50 ft)"></option>
-      <option value="Torch"></option>
-      <option value="Rations (1 day)"></option>
-      <option value="Waterskin"></option>
-      <option value="Tinderbox"></option>
-      <option value="Crowbar"></option>
-      <option value="Grappling Hook"></option>
-      <option value="Lantern (hooded)"></option>
-      <option value="Oil (flask)"></option>
-      <option value="Potion of Healing"></option>
-      <option value="Spellbook"></option>
-      <option value="Component Pouch"></option>
-      <option value="Arcane Focus"></option>
-      <option value="Holy Symbol"></option>
-      <option value="Druidic Focus"></option>
-      <option value="Healer's Kit"></option>
-      <option value="Thieves' Tools"></option>
-      <option value="Caltrops (bag of 20)"></option>
-      <option value="Ball Bearings (bag of 1,000)"></option>
-      <option value="Chain (10 ft)"></option>
-      <option value="Hammer"></option>
-      <option value="Piton"></option>
-      <option value="Shovel"></option>
-      <option value="Steel Mirror"></option>
-      <option value="Manacles"></option>
-      <option value="Explorer's Pack"></option>
-      <option value="Dungeoneer's Pack"></option>
-      <option value="Burglar's Pack"></option>
-      <option value="Diplomat's Pack"></option>
-      <option value="Priest's Pack"></option>
-      <option value="Scholar's Pack"></option>
-      <option value="Entertainer's Pack"></option>
-      <option value="Arrows (20)"></option>
-      <option value="Crossbow Bolts (20)"></option>
-      <option value="Padded Armor"></option>
-      <option value="Leather Armor"></option>
-      <option value="Studded Leather Armor"></option>
-      <option value="Hide Armor"></option>
-      <option value="Chain Shirt"></option>
-      <option value="Scale Mail"></option>
-      <option value="Breastplate"></option>
-      <option value="Half Plate"></option>
-      <option value="Ring Mail"></option>
-      <option value="Chain Mail"></option>
-      <option value="Splint Armor"></option>
-      <option value="Plate Armor"></option>
-      <option value="Shield"></option>
-      <option value="Club"></option>
-      <option value="Dagger"></option>
-      <option value="Handaxe"></option>
-      <option value="Javelin"></option>
-      <option value="Mace"></option>
-      <option value="Quarterstaff"></option>
-      <option value="Spear"></option>
-      <option value="Light Crossbow"></option>
-      <option value="Shortbow"></option>
-      <option value="Battleaxe"></option>
-      <option value="Glaive"></option>
-      <option value="Greataxe"></option>
-      <option value="Greatsword"></option>
-      <option value="Halberd"></option>
-      <option value="Longsword"></option>
-      <option value="Maul"></option>
-      <option value="Rapier"></option>
-      <option value="Scimitar"></option>
-      <option value="Shortsword"></option>
-      <option value="Warhammer"></option>
-      <option value="Hand Crossbow"></option>
-      <option value="Heavy Crossbow"></option>
-      <option value="Longbow"></option>
-    </datalist>
-    <sheet-toolbar></sheet-toolbar>
-
-    <div class="panel">
-      <div class="r-2" style="margin-bottom:12px">
         <fieldset>
-          <legend>Coins</legend>
-          <div style="display:flex;gap:8px;flex-wrap:wrap">
-            <label class="field" style="font-size:11px">CP<input type="number" style="width:66px"
-                x-model="c.coins.cp"></label>
-            <label class="field" style="font-size:11px">SP<input type="number" style="width:66px"
-                x-model="c.coins.sp"></label>
-            <label class="field" style="font-size:11px">EP<input type="number" style="width:66px"
-                x-model="c.coins.ep"></label>
-            <label class="field" style="font-size:11px">GP<input type="number" style="width:66px"
-                x-model="c.coins.gp"></label>
-            <label class="field" style="font-size:11px">PP<input type="number" style="width:66px"
-                x-model="c.coins.pp"></label>
+          <legend>Equipment</legend>
+          <div
+            style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px"
+          >
+            <button class="noprint" @click="c.equipment.push(newEquip())">
+              + Add item
+            </button>
+            <span style="font-size: 13px; font-weight: 600">Total weight: <span
+                x-text="totalWeight()"
+              ></span> <span
+                style="font-weight: 400; color: var(--muted)"
+              >/ capacity <span x-text="capacity()"></span></span></span>
           </div>
-        </fieldset>
-        <fieldset>
-          <legend>Attunement <span class="legend-note">— <span
-                x-text="attunedCount()"></span> / 3 slots used</span></legend>
-          <div class="col" style="gap:5px">
-            <template x-for="i in 3" :key="i">
-              <input x-model="c.attuned[i-1]" :placeholder="'Attuned magic item '+i">
+          <div class="col" style="gap: 8px">
+            <template x-for="e in c.equipment" :key="e.id">
+              <details class="card">
+                <summary>
+                  <span style="flex: 1" x-text="e.name||'Unnamed item'"></span>
+                  <span
+                    style="font-size: 12px; color: var(--muted); font-weight: 400"
+                    x-text="equipSub(e)"
+                  ></span>
+                  <span
+                    style="font-size: 12px; font-weight: 700; color: var(--accent); font-variant-numeric: tabular-nums"
+                    x-text="mBadge(e)"
+                  ></span>
+                </summary>
+                <div class="card-body">
+                  <div
+                    style="display: flex; gap: 8px; align-items: flex-end; flex-wrap: wrap"
+                  >
+                    <label class="field" style="flex: 1; min-width: 140px">Item
+                      name<input
+                        x-model="e.name"
+                        list="dl-item"
+                        style="font-weight: 600"
+                      ></label>
+                    <label class="field">Qty<input
+                        type="number"
+                        min="1"
+                        x-model="e.qty"
+                        style="width: 60px"
+                      ></label>
+                    <label class="field">Weight (ea, lb)<input
+                        type="number"
+                        min="0"
+                        step="0.1"
+                        x-model="e.weight"
+                        style="width: 88px"
+                      ></label>
+                    <button
+                      class="noprint"
+                      title="Remove"
+                      @click="c.equipment=c.equipment.filter(x=>x.id!==e.id)"
+                    >
+                      Delete
+                    </button>
+                  </div>
+
+                  <div class="metric-box">
+                    <div class="metric-row">
+                      <label class="field">Magic item ability
+                        <select x-model="e.metric" @change="seedUses(e)">
+                          <option value="none">None</option>
+                          <option value="uses">Charges — limited uses</option>
+                          <option value="dice">Dice bonus</option>
+                          <option value="bonus">Static bonus</option>
+                        </select></label>
+                      <label class="field" x-show="e.metric!=='none'">Value from
+                        <select x-model="e.source">
+                          <option value="pb">Proficiency Bonus</option>
+                          <option value="ability">Ability Modifier</option>
+                          <option value="level">Character Level</option>
+                          <option value="fixed">Fixed number</option>
+                          <option value="formula">Custom formula</option>
+                        </select></label>
+                      <label
+                        class="field"
+                        x-show="e.metric!=='none'&&e.source==='ability'"
+                      >Ability
+                        <select x-model="e.ability">
+                          <option value="str">STR</option>
+                          <option value="dex">DEX</option>
+                          <option value="con">CON</option>
+                          <option value="int">INT</option>
+                          <option value="wis">WIS</option>
+                          <option value="cha">CHA</option>
+                        </select></label>
+                      <label
+                        class="field"
+                        x-show="e.metric!=='none'&&e.source==='fixed'"
+                      >Number<input
+                          type="number"
+                          min="0"
+                          x-model="e.fixed"
+                          style="width: 70px"
+                        ></label>
+                      <label
+                        class="field"
+                        x-show="e.metric!=='none'&&e.source==='formula'"
+                      >Formula<input
+                          x-model="e.formula"
+                          placeholder="floor(PB/2)"
+                          style="width: 150px"
+                        ></label>
+                      <label class="field" x-show="e.metric==='dice'">Die
+                        <select x-model="e.dieSize">
+                          <option value="4">d4</option>
+                          <option value="6">d6</option>
+                          <option value="8">d8</option>
+                          <option value="10">d10</option>
+                          <option value="12">d12</option>
+                          <option value="20">d20</option>
+                        </select></label>
+                      <label class="field" x-show="e.metric==='uses'">Resets on
+                        <select x-model="e.reset">
+                          <option value="none">Never / manual</option>
+                          <option value="short">Short rest</option>
+                          <option value="long">Long rest (dawn)</option>
+                        </select></label>
+                    </div>
+                    <div class="mrow" x-show="e.metric==='uses'">
+                      <span
+                        style="font-size: 11px; text-transform: uppercase; letter-spacing: 0.05em; color: var(--muted)"
+                      >Charges</span>
+                      <button
+                        @click="setUses(e,mCur(e)-1)"
+                        style="width: 30px; font-size: 16px; line-height: 1"
+                      >
+                        −
+                      </button>
+                      <span
+                        style="font-weight: 700; font-size: 16px; min-width: 56px; text-align: center; font-variant-numeric: tabular-nums"
+                        x-text="mCur(e)+' / '+mVal(e)"
+                      ></span>
+                      <button
+                        @click="setUses(e,mCur(e)+1)"
+                        style="width: 30px; font-size: 16px; line-height: 1"
+                      >
+                        +
+                      </button>
+                      <span
+                        style="display: flex; gap: 4px; flex-wrap: wrap; margin-left: 6px"
+                      >
+                        <template x-for="i in pipCount(e)" :key="i"><span
+                            @click="pipClick(e,i)"
+                            class="pip"
+                            :class="{ on: i <= mCur(e) }"
+                          ></span></template>
+                      </span>
+                    </div>
+                    <div x-show="e.metric==='dice'" style="font-size: 13px">
+                      Result: <b
+                        x-text="mVal(e)+'d'+(e.dieSize||'6')"
+                      ></b>
+                    </div>
+                    <div x-show="e.metric==='bonus'" style="font-size: 13px">
+                      Result: <b x-text="fmt(mVal(e))"></b>
+                    </div>
+                    <div
+                      x-show="e.metric!=='none'&&e.source==='formula'"
+                      style="font-size: 11px; color: var(--muted)"
+                    >
+                      Variables: PB, LEVEL, STR…CHA · functions floor ceil round
+                      max min abs
+                    </div>
+                  </div>
+
+                  <div class="field">
+                    <div
+                      style="display: flex; justify-content: space-between; align-items: center"
+                    >
+                      <span>Description</span>
+                      <button
+                        class="noprint"
+                        @click="mdToggle('e-'+e.id)"
+                        style="padding: 1px 8px"
+                        x-text="preview['e-'+e.id]?'Edit':'Preview'"
+                      >
+                      </button>
+                    </div>
+                    <div x-show="!preview['e-'+e.id]">
+                      <textarea
+                        x-model="e.desc"
+                        placeholder="Markdown: **bold**, *italic*, - lists"
+                      ></textarea>
+                    </div>
+                    <div
+                      class="md-view"
+                      x-show="preview['e-'+e.id]"
+                      x-html="mdToHtml(e.desc)"
+                    >
+                    </div>
+                  </div>
+                </div>
+              </details>
             </template>
           </div>
         </fieldset>
       </div>
 
-      <fieldset>
-        <legend>Equipment</legend>
-        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px">
-          <button class="noprint" @click="c.equipment.push(newEquip())">+ Add item</button>
-          <span style="font-size:13px;font-weight:600">Total weight: <span x-text="totalWeight()"></span> <span
-              style="font-weight:400;color:var(--muted)">/ capacity <span x-text="capacity()"></span></span></span>
-        </div>
-        <div class="col" style="gap:8px">
-          <template x-for="e in c.equipment" :key="e.id">
-            <details class="card">
-              <summary>
-                <span style="flex:1" x-text="e.name||'Unnamed item'"></span>
-                <span style="font-size:12px;color:var(--muted);font-weight:400" x-text="equipSub(e)"></span>
-                <span style="font-size:12px;font-weight:700;color:var(--accent);font-variant-numeric:tabular-nums"
-                  x-text="mBadge(e)"></span>
-              </summary>
-              <div class="card-body">
-                <div style="display:flex;gap:8px;align-items:flex-end;flex-wrap:wrap">
-                  <label class="field" style="flex:1;min-width:140px">Item name<input x-model="e.name" list="dl-item"
-                      style="font-weight:600"></label>
-                  <label class="field">Qty<input type="number" min="1" x-model="e.qty" style="width:60px"></label>
-                  <label class="field">Weight (ea, lb)<input type="number" min="0" step="0.1" x-model="e.weight"
-                      style="width:88px"></label>
-                  <button class="noprint" title="Remove"
-                    @click="c.equipment=c.equipment.filter(x=>x.id!==e.id)">Delete</button>
-                </div>
-
-                <div class="metric-box">
-                  <div class="metric-row">
-                    <label class="field">Magic item ability
-                      <select x-model="e.metric" @change="seedUses(e)">
-                        <option value="none">None</option>
-                        <option value="uses">Charges — limited uses</option>
-                        <option value="dice">Dice bonus</option>
-                        <option value="bonus">Static bonus</option>
-                      </select></label>
-                    <label class="field" x-show="e.metric!=='none'">Value from
-                      <select x-model="e.source">
-                        <option value="pb">Proficiency Bonus</option>
-                        <option value="ability">Ability Modifier</option>
-                        <option value="level">Character Level</option>
-                        <option value="fixed">Fixed number</option>
-                        <option value="formula">Custom formula</option>
-                      </select></label>
-                    <label class="field" x-show="e.metric!=='none'&&e.source==='ability'">Ability
-                      <select x-model="e.ability">
-                        <option value="str">STR</option>
-                        <option value="dex">DEX</option>
-                        <option value="con">CON</option>
-                        <option value="int">INT</option>
-                        <option value="wis">WIS</option>
-                        <option value="cha">CHA</option>
-                      </select></label>
-                    <label class="field" x-show="e.metric!=='none'&&e.source==='fixed'">Number<input type="number"
-                        min="0" x-model="e.fixed" style="width:70px"></label>
-                    <label class="field" x-show="e.metric!=='none'&&e.source==='formula'">Formula<input
-                        x-model="e.formula" placeholder="floor(PB/2)" style="width:150px"></label>
-                    <label class="field" x-show="e.metric==='dice'">Die
-                      <select x-model="e.dieSize">
-                        <option value="4">d4</option>
-                        <option value="6">d6</option>
-                        <option value="8">d8</option>
-                        <option value="10">d10</option>
-                        <option value="12">d12</option>
-                        <option value="20">d20</option>
-                      </select></label>
-                    <label class="field" x-show="e.metric==='uses'">Resets on
-                      <select x-model="e.reset">
-                        <option value="none">Never / manual</option>
-                        <option value="short">Short rest</option>
-                        <option value="long">Long rest (dawn)</option>
-                      </select></label>
-                  </div>
-                  <div class="mrow" x-show="e.metric==='uses'">
-                    <span style="font-size:11px;text-transform:uppercase;letter-spacing:.05em;color:var(--muted)">Charges</span>
-                    <button @click="setUses(e,mCur(e)-1)" style="width:30px;font-size:16px;line-height:1">−</button>
-                    <span
-                      style="font-weight:700;font-size:16px;min-width:56px;text-align:center;font-variant-numeric:tabular-nums"
-                      x-text="mCur(e)+' / '+mVal(e)"></span>
-                    <button @click="setUses(e,mCur(e)+1)" style="width:30px;font-size:16px;line-height:1">+</button>
-                    <span style="display:flex;gap:4px;flex-wrap:wrap;margin-left:6px">
-                      <template x-for="i in pipCount(e)" :key="i"><span @click="pipClick(e,i)"
-                          class="pip" :class="{ on: i <= mCur(e) }"></span></template>
-                    </span>
-                  </div>
-                  <div x-show="e.metric==='dice'" style="font-size:13px">Result: <b
-                      x-text="mVal(e)+'d'+(e.dieSize||'6')"></b></div>
-                  <div x-show="e.metric==='bonus'" style="font-size:13px">Result: <b x-text="fmt(mVal(e))"></b></div>
-                  <div x-show="e.metric!=='none'&&e.source==='formula'" style="font-size:11px;color:var(--muted)">Variables: PB,
-                    LEVEL, STR…CHA · functions floor ceil round max min abs</div>
-                </div>
-
-                <div class="field">
-                  <div style="display:flex;justify-content:space-between;align-items:center"><span>Description</span>
-                    <button class="noprint" @click="mdToggle('e-'+e.id)" style="padding:1px 8px"
-                      x-text="preview['e-'+e.id]?'Edit':'Preview'"></button>
-                  </div>
-                  <div x-show="!preview['e-'+e.id]"><textarea x-model="e.desc"
-                      placeholder="Markdown: **bold**, *italic*, - lists"></textarea></div>
-                  <div class="md-view" x-show="preview['e-'+e.id]" x-html="mdToHtml(e.desc)"></div>
-                </div>
-              </div>
-            </details>
-          </template>
-        </div>
-      </fieldset>
-    </div>
-
-    <p class="page-foot noprint">
-      Auto-saves to this browser · Use your browser's Print to export this page as a PDF · Text areas support basic
-      Markdown. Game rules © Wizards of the Coast; this is an original sheet layout.
-    </p>
-  </main>
-</body>
-
+     <sheet-footer></sheet-footer> 
+    </main>
+  </body>
 </html>

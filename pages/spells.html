@@ -1,254 +1,420 @@
 <!DOCTYPE html>
 <html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Spellcasting · D&amp;D Character Sheet</title>
+    <script>
+      try {
+        var t = localStorage.getItem("dnd-theme");
+        document.documentElement.dataset.theme = t ||
+          (matchMedia("(prefers-color-scheme: dark)").matches
+            ? "dark"
+            : "light");
+      } catch (e) {
+        console.error("Error setting theme:", e);
+      }
+    </script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+      rel="stylesheet"
+      href="https://fonts.googleapis.com/css2?family=Alegreya:ital,wght@0,400;0,500;0,700;1,400&family=Cinzel:wght@500;600;700&display=swap"
+    >
+    <link rel="stylesheet" href="../styles.css">
+    <script type="module" src="../src/main.ts"></script>
+  </head>
 
-<head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Spellcasting · D&amp;D Character Sheet</title>
-  <script>
-    try { var t = localStorage.getItem('dnd-theme'); document.documentElement.dataset.theme = t || (matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light'); } catch (e) { }
-  </script>
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link rel="stylesheet"
-    href="https://fonts.googleapis.com/css2?family=Alegreya:ital,wght@0,400;0,500;0,700;1,400&family=Cinzel:wght@500;600;700&display=swap">
-  <link rel="stylesheet" href="../styles.css">
-  <script type="module" src="../src/main.ts"></script>
-</head>
+  <body>
+    <main
+      class="wrap"
+      x-data="sheet()"
+      x-cloak
+      @sheet-short-rest.window="shortRest()"
+      @sheet-long-rest.window="longRest()"
+      @sheet-export.window="exportJson()"
+      @sheet-import.window="importJsonText($event.detail)"
+    >
+      <sheet-nav current="spells"></sheet-nav>
 
-<body>
-  <main class="wrap" x-data="sheet()" x-cloak @sheet-short-rest.window="shortRest()"
-    @sheet-long-rest.window="longRest()" @sheet-export.window="exportJson()"
-    @sheet-import.window="importJsonText($event.detail)">
+      <datalist id="dl-school">
+        <option value="Abjuration"></option>
+        <option value="Conjuration"></option>
+        <option value="Divination"></option>
+        <option value="Enchantment"></option>
+        <option value="Evocation"></option>
+        <option value="Illusion"></option>
+        <option value="Necromancy"></option>
+        <option value="Transmutation"></option>
+      </datalist>
 
-    <sheet-nav current="spells"></sheet-nav>
+      <datalist id="dl-damage">
+        <option value="Acid"></option>
+        <option value="Bludgeoning"></option>
+        <option value="Cold"></option>
+        <option value="Fire"></option>
+        <option value="Force"></option>
+        <option value="Lightning"></option>
+        <option value="Necrotic"></option>
+        <option value="Piercing"></option>
+        <option value="Poison"></option>
+        <option value="Psychic"></option>
+        <option value="Radiant"></option>
+        <option value="Slashing"></option>
+        <option value="Thunder"></option>
+      </datalist>
+      <sheet-toolbar></sheet-toolbar>
 
-    <datalist id="dl-school">
-      <option value="Abjuration"></option>
-      <option value="Conjuration"></option>
-      <option value="Divination"></option>
-      <option value="Enchantment"></option>
-      <option value="Evocation"></option>
-      <option value="Illusion"></option>
-      <option value="Necromancy"></option>
-      <option value="Transmutation"></option>
-    </datalist>
-
-    <datalist id="dl-damage">
-      <option value="Acid"></option>
-      <option value="Bludgeoning"></option>
-      <option value="Cold"></option>
-      <option value="Fire"></option>
-      <option value="Force"></option>
-      <option value="Lightning"></option>
-      <option value="Necrotic"></option>
-      <option value="Piercing"></option>
-      <option value="Poison"></option>
-      <option value="Psychic"></option>
-      <option value="Radiant"></option>
-      <option value="Slashing"></option>
-      <option value="Thunder"></option>
-    </datalist>
-    <sheet-toolbar></sheet-toolbar>
-
-    <div class="panel">
-      <fieldset style="margin-bottom:12px">
-        <legend>Spellcasting</legend>
-        <div class="r-spellhead">
-          <label class="field">Primary Ability
-            <select x-model="c.spellAbility">
-              <option value="str">STR</option>
-              <option value="dex">DEX</option>
-              <option value="con">CON</option>
-              <option value="int">INT</option>
-              <option value="wis">WIS</option>
-              <option value="cha">CHA</option>
-            </select></label>
-          <fieldset style="text-align:center">
-            <legend>Save DC</legend>
-            <div style="font-size:20px;font-weight:700" x-text="8+pb()+spm()"></div>
-          </fieldset>
-          <fieldset style="text-align:center">
-            <legend>Atk Bonus</legend>
-            <div style="font-size:20px;font-weight:700" x-text="fmt(pb()+spm())"></div>
-          </fieldset>
-          <fieldset style="text-align:center">
-            <legend>Caster Level</legend>
-            <div style="font-size:20px;font-weight:700" x-text="casterLvl()"></div>
-          </fieldset>
-          <fieldset style="text-align:center">
-            <legend>Prepared</legend>
-            <div style="display:flex;align-items:center;justify-content:center;gap:4px">
-              <span style="font-size:20px;font-weight:700" x-text="preparedCount()"></span><span
-                style="color:var(--muted)">/</span>
-              <label class="field" style="font-size:10px;color:var(--muted)">max<input x-model="c.preparedMax"
-                  style="width:52px;text-align:center"></label>
-            </div>
-          </fieldset>
-        </div>
-        <label class="field-in" style="margin-top:8px"><input type="checkbox" x-model="c.autoSlots"> Auto-calculate
-          spell slots from the multiclass table (uses the Spellcasting type set on each class)</label>
-      </fieldset>
-
-      <fieldset style="margin-bottom:12px" x-show="pactInfo()">
-        <legend>Pact Magic (Warlock)</legend>
-        <div class="mrow" style="gap:8px">
-          <span style="font-size:13px;font-weight:600" x-text="pactInfo()?('Level '+pactInfo().lvl+' slots'):''"></span>
-          <button class="noprint" @click="pactStep(1)" style="width:26px" title="Use a slot">−</button>
-          <span style="font-weight:700;min-width:44px;text-align:center;font-variant-numeric:tabular-nums"
-            x-text="pactInfo()?((pactInfo().n-pactUsedC())+' / '+pactInfo().n):''"></span>
-          <button class="noprint" @click="pactStep(-1)" style="width:26px" title="Regain a slot">+</button>
-          <span style="font-size:11px;color:var(--muted)">Pact slots cast at their shown level and recharge on a short
-            rest.</span>
-        </div>
-      </fieldset>
-
-      <div class="r-2">
-        <template x-for="(s,lvl) in c.spellLevels" :key="lvl">
-          <fieldset>
-            <div
-              style="display:flex;justify-content:space-between;align-items:center;margin-bottom:6px;gap:6px;flex-wrap:wrap">
-              <strong style="font-size:13px" x-text="lvl===0?'Cantrips':'Level '+lvl"></strong>
-              <div class="mrow" x-show="lvl>0" style="gap:5px">
-                <span style="font-size:11px;color:var(--muted)">Slots</span>
-                <button class="noprint" @click="slotStep(lvl,1)" style="width:26px" aria-label="Use a slot">−</button>
-                <span style="font-weight:700;min-width:44px;text-align:center;font-variant-numeric:tabular-nums"
-                  x-text="slotsText(lvl)"></span>
-                <button class="noprint" @click="slotStep(lvl,-1)" style="width:26px"
-                  aria-label="Regain a slot">+</button>
-                <label class="field-in" x-show="!autoOn()" style="font-size:11px;color:var(--muted)">of<input
-                    x-model="s.slotsTotal" style="width:46px;text-align:center" aria-label="Total slots"></label>
-                <span x-show="autoOn()" style="font-size:11px;color:var(--muted)"
-                  x-text="'of '+slotTotal(lvl)+' (auto)'"></span>
+      <div class="panel">
+        <fieldset style="margin-bottom: 12px">
+          <legend>Spellcasting</legend>
+          <div class="r-spellhead">
+            <label class="field">Primary Ability
+              <select x-model="c.spellAbility">
+                <option value="str">STR</option>
+                <option value="dex">DEX</option>
+                <option value="con">CON</option>
+                <option value="int">INT</option>
+                <option value="wis">WIS</option>
+                <option value="cha">CHA</option>
+              </select></label>
+            <fieldset style="text-align: center">
+              <legend>Save DC</legend>
+              <div
+                style="font-size: 20px; font-weight: 700"
+                x-text="8+pb()+spm()"
+              >
               </div>
-            </div>
-            <div class="col" style="gap:5px">
-              <template x-for="(sp,i) in s.spells" :key="sp.id||i">
-                <details style="border:1px solid var(--rule);border-radius:4px;background:var(--surface-2)">
-                  <summary style="cursor:pointer;padding:5px 8px;display:flex;gap:8px;align-items:center">
-                    <span style="flex:1" x-text="sp.name||'New spell'"></span>
-                    <span style="font-size:11px;color:var(--accent)" x-text="spellTags(sp)"></span>
-                  </summary>
-                  <div style="padding:2px 8px 8px;display:flex;flex-direction:column;gap:6px">
-                    <div style="display:flex;gap:6px;flex-wrap:wrap">
-                      <label class="field" style="flex:2;min-width:140px">Name<input x-model="sp.name"
-                          style="font-weight:600"></label>
-                      <label class="field" style="flex:1;min-width:120px">School
-                        <select x-model="sp.school" list="dl-school">
-                          <option value="">—</option>
-                          <option value="Abjuration">Abjuration</option>
-                          <option value="Conjuration">Conjuration</option>
-                          <option value="Divination">Divination</option>
-                          <option value="Enchantment">Enchantment</option>
-                          <option value="Evocation">Evocation</option>
-                          <option value="Illusion">Illusion</option>
-                          <option value="Necromancy">Necromancy</option>
-                          <option value="Transmutation">Transmutation</option>
-                        </select></label>
-                    </div>
-                    <div style="display:grid;grid-template-columns:1fr 1fr;gap:6px">
-                      <label class="field" style="font-size:11px">Casting Time<input x-model="sp.castingTime"></label>
-                      <label class="field" style="font-size:11px">Range<input x-model="sp.range"></label>
-                      <label class="field" style="font-size:11px">Components<input x-model="sp.components"
-                          placeholder="V, S, M"></label>
-                      <label class="field" style="font-size:11px">Duration<input x-model="sp.duration"></label>
-                    </div>
-                    <div style="display:flex;gap:6px;flex-wrap:wrap;align-items:flex-end">
-                      <label class="field" style="font-size:11px">Dmg dice<input type="number" min="0"
-                          style="width:48px" x-model="sp.damage.dice"></label>
-                      <label class="field" style="font-size:11px">Die
-                        <select x-model="sp.damage.die">
-                          <option value="4">d4</option>
-                          <option value="6">d6</option>
-                          <option value="8">d8</option>
-                          <option value="10">d10</option>
-                          <option value="12">d12</option>
-                        </select></label>
-                      <label class="field" style="font-size:11px">+Mod<input style="width:48px"
-                          x-model="sp.damage.bonus"></label>
-                      <label class="field" style="font-size:11px;flex:1;min-width:100px">Type<input
-                          x-model="sp.damage.type" list="dl-damage"></label>
-                      <label class="field" style="font-size:11px;align-items:center">Damage<span
-                          style="font-size:14px;font-weight:700;min-width:60px;text-align:center"
-                          x-text="dmgText(sp.damage)"></span></label>
-                    </div>
-                    <div style="display:flex;gap:14px;font-size:12px;flex-wrap:wrap">
-                      <label class="field-in" x-show="lvl>0"><input type="checkbox" x-model="sp.prepared">
-                        Prepared</label>
-                      <label class="field-in"><input type="checkbox" x-model="sp.concentration"> Concentration</label>
-                      <label class="field-in"><input type="checkbox" x-model="sp.ritual"> Ritual</label>
-                    </div>
-                    <div class="field">
-                      <div style="display:flex;justify-content:space-between;align-items:center"><span>Effect</span>
-                        <button class="noprint" @click="mdToggle('sp-'+sp.id)" style="padding:1px 8px"
-                          x-text="preview['sp-'+sp.id]?'Edit':'Preview'"></button>
-                      </div>
-                      <div x-show="!preview['sp-'+sp.id]"><textarea x-model="sp.desc"
-                          placeholder="Markdown supported"></textarea></div>
-                      <div class="md-view" x-show="preview['sp-'+sp.id]" x-html="mdToHtml(sp.desc)"></div>
-                    </div>
-                    <button class="noprint" @click="s.spells.splice(i,1)" style="align-self:flex-start">Delete</button>
-                  </div>
-                </details>
-              </template>
-            </div>
-            <button class="noprint" style="margin-top:6px" @click="s.spells.push(newSpell())">+ Add spell</button>
-          </fieldset>
-        </template>
-      </div>
+            </fieldset>
+            <fieldset style="text-align: center">
+              <legend>Atk Bonus</legend>
+              <div
+                style="font-size: 20px; font-weight: 700"
+                x-text="fmt(pb()+spm())"
+              >
+              </div>
+            </fieldset>
+            <fieldset style="text-align: center">
+              <legend>Caster Level</legend>
+              <div
+                style="font-size: 20px; font-weight: 700"
+                x-text="casterLvl()"
+              >
+              </div>
+            </fieldset>
+            <fieldset style="text-align: center">
+              <legend>Prepared</legend>
+              <div
+                style="display: flex; align-items: center; justify-content: center; gap: 4px"
+              >
+                <span
+                  style="font-size: 20px; font-weight: 700"
+                  x-text="preparedCount()"
+                ></span><span
+                  style="color: var(--muted)"
+                >/</span>
+                <label
+                  class="field"
+                  style="font-size: 10px; color: var(--muted)"
+                >max<input
+                    x-model="c.preparedMax"
+                    style="width: 52px; text-align: center"
+                  ></label>
+              </div>
+            </fieldset>
+          </div>
+          <label class="field-in" style="margin-top: 8px"><input
+              type="checkbox"
+              x-model="c.autoSlots"
+            > Auto-calculate spell slots from the multiclass table (uses the
+            Spellcasting type set on each class)</label>
+        </fieldset>
 
-      <fieldset style="margin-top:12px">
-        <legend>Innate &amp; Granted Spells <span class="legend-note">— from race,
-            feats or items (own uses, not slots)</span></legend>
-        <div class="col" style="gap:8px">
-          <template x-for="o in c.innate" :key="o.id">
-            <details class="card">
-              <summary>
-                <span style="flex:1" x-text="o.name||'Innate spell'"></span>
-                <span style="font-size:11px;color:var(--muted);font-weight:400" x-text="o.origin"></span>
-                <span style="font-size:12px;font-weight:700;color:var(--accent);font-variant-numeric:tabular-nums"
-                  x-text="'DC '+innateDC(o)+' · '+(o.metric==='uses'?mBadge(o):'At will')"></span>
-              </summary>
-              <div class="card-body">
-                <div style="display:flex;gap:8px;align-items:flex-end;flex-wrap:wrap">
-                  <label class="field" style="flex:1;min-width:140px">Spell name<input x-model="o.name"
-                      style="font-weight:600"></label>
-                  <label class="field" style="flex:1;min-width:120px">Source<input x-model="o.origin"
-                      placeholder="Race, feat, item…"></label>
-                  <label class="field">Cast with
-                    <select x-model="o.castAbility">
-                      <option value="str">STR</option>
-                      <option value="dex">DEX</option>
-                      <option value="con">CON</option>
-                      <option value="int">INT</option>
-                      <option value="wis">WIS</option>
-                      <option value="cha">CHA</option>
-                    </select></label>
-                  <label class="field">Spell level<input x-model="o.level" style="width:70px"
-                      placeholder="e.g. 2"></label>
-                  <label class="field" style="align-items:center">Save DC<span style="font-size:15px;font-weight:700"
-                      x-text="'DC '+innateDC(o)"></span></label>
-                  <button class="noprint" title="Remove"
-                    @click="c.innate=c.innate.filter(x=>x.id!==o.id)">Delete</button>
+        <fieldset style="margin-bottom: 12px" x-show="pactInfo()">
+          <legend>Pact Magic (Warlock)</legend>
+          <div class="mrow" style="gap: 8px">
+            <span
+              style="font-size: 13px; font-weight: 600"
+              x-text="pactInfo()?('Level '+pactInfo().lvl+' slots'):''"
+            ></span>
+            <button
+              class="noprint"
+              @click="pactStep(1)"
+              style="width: 26px"
+              title="Use a slot"
+            >
+              −
+            </button>
+            <span
+              style="font-weight: 700; min-width: 44px; text-align: center; font-variant-numeric: tabular-nums"
+              x-text="pactInfo()?((pactInfo().n-pactUsedC())+' / '+pactInfo().n):''"
+            ></span>
+            <button
+              class="noprint"
+              @click="pactStep(-1)"
+              style="width: 26px"
+              title="Regain a slot"
+            >
+              +
+            </button>
+            <span style="font-size: 11px; color: var(--muted)"
+            >Pact slots cast at their shown level and recharge on a short
+              rest.</span>
+          </div>
+        </fieldset>
+
+        <div class="r-2">
+          <template x-for="(s,lvl) in c.spellLevels" :key="lvl">
+            <fieldset>
+              <div
+                style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px; gap: 6px; flex-wrap: wrap"
+              >
+                <strong
+                  style="font-size: 13px"
+                  x-text="lvl===0?'Cantrips':'Level '+lvl"
+                ></strong>
+                <div class="mrow" x-show="lvl>0" style="gap: 5px">
+                  <span style="font-size: 11px; color: var(--muted)"
+                  >Slots</span>
+                  <button
+                    class="noprint"
+                    @click="slotStep(lvl,1)"
+                    style="width: 26px"
+                    aria-label="Use a slot"
+                  >
+                    −
+                  </button>
+                  <span
+                    style="font-weight: 700; min-width: 44px; text-align: center; font-variant-numeric: tabular-nums"
+                    x-text="slotsText(lvl)"
+                  ></span>
+                  <button
+                    class="noprint"
+                    @click="slotStep(lvl,-1)"
+                    style="width: 26px"
+                    aria-label="Regain a slot"
+                  >
+                    +
+                  </button>
+                  <label
+                    class="field-in"
+                    x-show="!autoOn()"
+                    style="font-size: 11px; color: var(--muted)"
+                  >of<input
+                      x-model="s.slotsTotal"
+                      style="width: 46px; text-align: center"
+                      aria-label="Total slots"
+                    ></label>
+                  <span
+                    x-show="autoOn()"
+                    style="font-size: 11px; color: var(--muted)"
+                    x-text="'of '+slotTotal(lvl)+' (auto)'"
+                  ></span>
                 </div>
+              </div>
+              <div class="col" style="gap: 5px">
+                <template x-for="(sp,i) in s.spells" :key="sp.id||i">
+                  <details
+                    style="border: 1px solid var(--rule); border-radius: 4px; background: var(--surface-2)"
+                  >
+                    <summary
+                      style="cursor: pointer; padding: 5px 8px; display: flex; gap: 8px; align-items: center"
+                    >
+                      <span
+                        style="flex: 1"
+                        x-text="sp.name||'New spell'"
+                      ></span>
+                      <span
+                        style="font-size: 11px; color: var(--accent)"
+                        x-text="spellTags(sp)"
+                      ></span>
+                    </summary>
+                    <div
+                      style="padding: 2px 8px 8px; display: flex; flex-direction: column; gap: 6px"
+                    >
+                      <div style="display: flex; gap: 6px; flex-wrap: wrap">
+                        <label
+                          class="field"
+                          style="flex: 2; min-width: 140px"
+                        >Name<input
+                            x-model="sp.name"
+                            style="font-weight: 600"
+                          ></label>
+                        <label
+                          class="field"
+                          style="flex: 1; min-width: 120px"
+                        >School
+                          <select x-model="sp.school" list="dl-school">
+                            <option value="">—</option>
+                            <option value="Abjuration">Abjuration</option>
+                            <option value="Conjuration">Conjuration</option>
+                            <option value="Divination">Divination</option>
+                            <option value="Enchantment">Enchantment</option>
+                            <option value="Evocation">Evocation</option>
+                            <option value="Illusion">Illusion</option>
+                            <option value="Necromancy">Necromancy</option>
+                            <option value="Transmutation">Transmutation</option>
+                          </select></label>
+                      </div>
+                      <div
+                        style="display: grid; grid-template-columns: 1fr 1fr; gap: 6px"
+                      >
+                        <label class="field" style="font-size: 11px">Casting
+                          Time<input x-model="sp.castingTime"></label>
+                        <label class="field" style="font-size: 11px">Range<input
+                            x-model="sp.range"
+                          ></label>
+                        <label
+                          class="field"
+                          style="font-size: 11px"
+                        >Components<input
+                            x-model="sp.components"
+                            placeholder="V, S, M"
+                          ></label>
+                        <label
+                          class="field"
+                          style="font-size: 11px"
+                        >Duration<input x-model="sp.duration"></label>
+                      </div>
+                      <div
+                        style="display: flex; gap: 6px; flex-wrap: wrap; align-items: flex-end"
+                      >
+                        <label class="field" style="font-size: 11px">Dmg
+                          dice<input
+                            type="number"
+                            min="0"
+                            style="width: 48px"
+                            x-model="sp.damage.dice"
+                          ></label>
+                        <label class="field" style="font-size: 11px">Die
+                          <select x-model="sp.damage.die">
+                            <option value="4">d4</option>
+                            <option value="6">d6</option>
+                            <option value="8">d8</option>
+                            <option value="10">d10</option>
+                            <option value="12">d12</option>
+                          </select></label>
+                        <label class="field" style="font-size: 11px">+Mod<input
+                            style="width: 48px"
+                            x-model="sp.damage.bonus"
+                          ></label>
+                        <label
+                          class="field"
+                          style="font-size: 11px; flex: 1; min-width: 100px"
+                        >Type<input
+                            x-model="sp.damage.type"
+                            list="dl-damage"
+                          ></label>
+                        <label
+                          class="field"
+                          style="font-size: 11px; align-items: center"
+                        >Damage<span
+                            style="font-size: 14px; font-weight: 700; min-width: 60px; text-align: center"
+                            x-text="dmgText(sp.damage)"
+                          ></span></label>
+                      </div>
+                      <div
+                        style="display: flex; gap: 14px; font-size: 12px; flex-wrap: wrap"
+                      >
+                        <label class="field-in" x-show="lvl>0"><input
+                            type="checkbox"
+                            x-model="sp.prepared"
+                          >
+                          Prepared</label>
+                        <label class="field-in"><input
+                            type="checkbox"
+                            x-model="sp.concentration"
+                          > Concentration</label>
+                        <label class="field-in"><input
+                            type="checkbox"
+                            x-model="sp.ritual"
+                          > Ritual</label>
+                      </div>
+                      <div class="field">
+                        <div
+                          style="display: flex; justify-content: space-between; align-items: center"
+                        >
+                          <span>Effect</span>
+                          <button
+                            class="noprint"
+                            @click="mdToggle('sp-'+sp.id)"
+                            style="padding: 1px 8px"
+                            x-text="preview['sp-'+sp.id]?'Edit':'Preview'"
+                          >
+                          </button>
+                        </div>
+                        <div x-show="!preview['sp-'+sp.id]">
+                          <textarea
+                            x-model="sp.desc"
+                            placeholder="Markdown supported"
+                          ></textarea>
+                        </div>
+                        <div
+                          class="md-view"
+                          x-show="preview['sp-'+sp.id]"
+                          x-html="mdToHtml(sp.desc)"
+                        >
+                        </div>
+                      </div>
+                      <button
+                        class="noprint"
+                        @click="s.spells.splice(i,1)"
+                        style="align-self: flex-start"
+                      >
+                        Delete
+                      </button>
+                    </div>
+                  </details>
+                </template>
+              </div>
+              <button
+                class="noprint"
+                style="margin-top: 6px"
+                @click="s.spells.push(newSpell())"
+              >
+                + Add spell
+              </button>
+            </fieldset>
+          </template>
+        </div>
 
-                <div class="metric-box">
-                  <div class="metric-row">
-                    <label class="field">Usage
-                      <select x-model="o.metric" @change="seedUses(o)">
-                        <option value="uses">Limited uses</option>
-                        <option value="none">At will / none</option>
-                      </select></label>
-                    <label class="field" x-show="o.metric!=='none'">Uses from
-                      <select x-model="o.source">
-                        <option value="fixed">Fixed number</option>
-                        <option value="pb">Proficiency Bonus</option>
-                        <option value="ability">Ability Modifier</option>
-                        <option value="level">Character Level</option>
-                        <option value="formula">Custom formula</option>
-                      </select></label>
-                    <label class="field" x-show="o.metric!=='none'&&o.source==='ability'">Ability
-                      <select x-model="o.ability">
+        <fieldset style="margin-top: 12px">
+          <legend>
+            Innate &amp; Granted Spells <span class="legend-note"
+            >— from race, feats or items (own uses, not slots)</span>
+          </legend>
+          <div class="col" style="gap: 8px">
+            <template x-for="o in c.innate" :key="o.id">
+              <details class="card">
+                <summary>
+                  <span style="flex: 1" x-text="o.name||'Innate spell'"></span>
+                  <span
+                    style="font-size: 11px; color: var(--muted); font-weight: 400"
+                    x-text="o.origin"
+                  ></span>
+                  <span
+                    style="font-size: 12px; font-weight: 700; color: var(--accent); font-variant-numeric: tabular-nums"
+                    x-text="'DC '+innateDC(o)+' · '+(o.metric==='uses'?mBadge(o):'At will')"
+                  ></span>
+                </summary>
+                <div class="card-body">
+                  <div
+                    style="display: flex; gap: 8px; align-items: flex-end; flex-wrap: wrap"
+                  >
+                    <label class="field" style="flex: 1; min-width: 140px">Spell
+                      name<input
+                        x-model="o.name"
+                        style="font-weight: 600"
+                      ></label>
+                    <label
+                      class="field"
+                      style="flex: 1; min-width: 120px"
+                    >Source<input
+                        x-model="o.origin"
+                        placeholder="Race, feat, item…"
+                      ></label>
+                    <label class="field">Cast with
+                      <select x-model="o.castAbility">
                         <option value="str">STR</option>
                         <option value="dex">DEX</option>
                         <option value="con">CON</option>
@@ -256,54 +422,149 @@
                         <option value="wis">WIS</option>
                         <option value="cha">CHA</option>
                       </select></label>
-                    <label class="field" x-show="o.metric!=='none'&&o.source==='fixed'">Number<input type="number"
-                        min="0" x-model="o.fixed" style="width:70px"></label>
-                    <label class="field" x-show="o.metric!=='none'&&o.source==='formula'">Formula<input
-                        x-model="o.formula" placeholder="floor(PB/2)" style="width:150px"></label>
-                    <label class="field" x-show="o.metric==='uses'">Resets on
-                      <select x-model="o.reset">
-                        <option value="none">Never / manual</option>
-                        <option value="short">Short rest</option>
-                        <option value="long">Long rest</option>
-                      </select></label>
+                    <label class="field">Spell level<input
+                        x-model="o.level"
+                        style="width: 70px"
+                        placeholder="e.g. 2"
+                      ></label>
+                    <label class="field" style="align-items: center">Save
+                      DC<span
+                        style="font-size: 15px; font-weight: 700"
+                        x-text="'DC '+innateDC(o)"
+                      ></span></label>
+                    <button
+                      class="noprint"
+                      title="Remove"
+                      @click="c.innate=c.innate.filter(x=>x.id!==o.id)"
+                    >
+                      Delete
+                    </button>
                   </div>
-                  <div class="mrow" x-show="o.metric==='uses'">
-                    <span style="font-size:11px;text-transform:uppercase;letter-spacing:.05em;color:var(--muted)">Uses</span>
-                    <button @click="setUses(o,mCur(o)-1)" style="width:30px;font-size:16px;line-height:1">−</button>
-                    <span
-                      style="font-weight:700;font-size:16px;min-width:56px;text-align:center;font-variant-numeric:tabular-nums"
-                      x-text="mCur(o)+' / '+mVal(o)"></span>
-                    <button @click="setUses(o,mCur(o)+1)" style="width:30px;font-size:16px;line-height:1">+</button>
-                    <span style="display:flex;gap:4px;flex-wrap:wrap;margin-left:6px">
-                      <template x-for="i in pipCount(o)" :key="i"><span @click="pipClick(o,i)"
-                          class="pip" :class="{ on: i <= mCur(o) }"></span></template>
-                    </span>
+
+                  <div class="metric-box">
+                    <div class="metric-row">
+                      <label class="field">Usage
+                        <select x-model="o.metric" @change="seedUses(o)">
+                          <option value="uses">Limited uses</option>
+                          <option value="none">At will / none</option>
+                        </select></label>
+                      <label class="field" x-show="o.metric!=='none'">Uses from
+                        <select x-model="o.source">
+                          <option value="fixed">Fixed number</option>
+                          <option value="pb">Proficiency Bonus</option>
+                          <option value="ability">Ability Modifier</option>
+                          <option value="level">Character Level</option>
+                          <option value="formula">Custom formula</option>
+                        </select></label>
+                      <label
+                        class="field"
+                        x-show="o.metric!=='none'&&o.source==='ability'"
+                      >Ability
+                        <select x-model="o.ability">
+                          <option value="str">STR</option>
+                          <option value="dex">DEX</option>
+                          <option value="con">CON</option>
+                          <option value="int">INT</option>
+                          <option value="wis">WIS</option>
+                          <option value="cha">CHA</option>
+                        </select></label>
+                      <label
+                        class="field"
+                        x-show="o.metric!=='none'&&o.source==='fixed'"
+                      >Number<input
+                          type="number"
+                          min="0"
+                          x-model="o.fixed"
+                          style="width: 70px"
+                        ></label>
+                      <label
+                        class="field"
+                        x-show="o.metric!=='none'&&o.source==='formula'"
+                      >Formula<input
+                          x-model="o.formula"
+                          placeholder="floor(PB/2)"
+                          style="width: 150px"
+                        ></label>
+                      <label class="field" x-show="o.metric==='uses'">Resets on
+                        <select x-model="o.reset">
+                          <option value="none">Never / manual</option>
+                          <option value="short">Short rest</option>
+                          <option value="long">Long rest</option>
+                        </select></label>
+                    </div>
+                    <div class="mrow" x-show="o.metric==='uses'">
+                      <span
+                        style="font-size: 11px; text-transform: uppercase; letter-spacing: 0.05em; color: var(--muted)"
+                      >Uses</span>
+                      <button
+                        @click="setUses(o,mCur(o)-1)"
+                        style="width: 30px; font-size: 16px; line-height: 1"
+                      >
+                        −
+                      </button>
+                      <span
+                        style="font-weight: 700; font-size: 16px; min-width: 56px; text-align: center; font-variant-numeric: tabular-nums"
+                        x-text="mCur(o)+' / '+mVal(o)"
+                      ></span>
+                      <button
+                        @click="setUses(o,mCur(o)+1)"
+                        style="width: 30px; font-size: 16px; line-height: 1"
+                      >
+                        +
+                      </button>
+                      <span
+                        style="display: flex; gap: 4px; flex-wrap: wrap; margin-left: 6px"
+                      >
+                        <template x-for="i in pipCount(o)" :key="i"><span
+                            @click="pipClick(o,i)"
+                            class="pip"
+                            :class="{ on: i <= mCur(o) }"
+                          ></span></template>
+                      </span>
+                    </div>
+                  </div>
+
+                  <div class="field">
+                    <div
+                      style="display: flex; justify-content: space-between; align-items: center"
+                    >
+                      <span>Effect / notes</span>
+                      <button
+                        class="noprint"
+                        @click="mdToggle('in-'+o.id)"
+                        style="padding: 1px 8px"
+                        x-text="preview['in-'+o.id]?'Edit':'Preview'"
+                      >
+                      </button>
+                    </div>
+                    <div x-show="!preview['in-'+o.id]">
+                      <textarea
+                        x-model="o.notes"
+                        placeholder="Markdown supported"
+                      ></textarea>
+                    </div>
+                    <div
+                      class="md-view"
+                      x-show="preview['in-'+o.id]"
+                      x-html="mdToHtml(o.notes)"
+                    >
+                    </div>
                   </div>
                 </div>
+              </details>
+            </template>
+          </div>
+          <button
+            class="noprint"
+            style="margin-top: 10px"
+            @click="c.innate.push(newInnate())"
+          >
+            + Add innate / granted spell
+          </button>
+        </fieldset>
+      </div>
 
-                <div class="field">
-                  <div style="display:flex;justify-content:space-between;align-items:center"><span>Effect / notes</span>
-                    <button class="noprint" @click="mdToggle('in-'+o.id)" style="padding:1px 8px"
-                      x-text="preview['in-'+o.id]?'Edit':'Preview'"></button>
-                  </div>
-                  <div x-show="!preview['in-'+o.id]"><textarea x-model="o.notes"
-                      placeholder="Markdown supported"></textarea></div>
-                  <div class="md-view" x-show="preview['in-'+o.id]" x-html="mdToHtml(o.notes)"></div>
-                </div>
-              </div>
-            </details>
-          </template>
-        </div>
-        <button class="noprint" style="margin-top:10px" @click="c.innate.push(newInnate())">+ Add innate / granted
-          spell</button>
-      </fieldset>
-    </div>
-
-    <p class="page-foot noprint">
-      Auto-saves to this browser · Use your browser's Print to export this page as a PDF · Text areas support basic
-      Markdown. Game rules © Wizards of the Coast; this is an original sheet layout.
-    </p>
-  </main>
-</body>
-
+      <sheet-footer></sheet-footer>
+    </main>
+  </body>
 </html>

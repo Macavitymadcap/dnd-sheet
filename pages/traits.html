@@ -1,268 +1,373 @@
 <!DOCTYPE html>
 <html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Traits & Proficiencies · D&amp;D Character Sheet</title>
+    <script>
+      try {
+        var t = localStorage.getItem("dnd-theme");
+        document.documentElement.dataset.theme = t ||
+          (matchMedia("(prefers-color-scheme: dark)").matches
+            ? "dark"
+            : "light");
+      } catch (e) {
+        console.error("Error setting theme:", e);
+      }
+    </script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+      rel="stylesheet"
+      href="https://fonts.googleapis.com/css2?family=Alegreya:ital,wght@0,400;0,500;0,700;1,400&family=Cinzel:wght@500;600;700&display=swap"
+    >
+    <link rel="stylesheet" href="../styles.css">
+    <script type="module" src="../src/main.ts"></script>
+  </head>
 
-<head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Traits & Proficiencies · D&amp;D Character Sheet</title>
-  <script>
-    try { var t = localStorage.getItem('dnd-theme'); document.documentElement.dataset.theme = t || (matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light'); } catch (e) { }
-  </script>
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link rel="stylesheet"
-    href="https://fonts.googleapis.com/css2?family=Alegreya:ital,wght@0,400;0,500;0,700;1,400&family=Cinzel:wght@500;600;700&display=swap">
-  <link rel="stylesheet" href="../styles.css">
-  <script type="module" src="../src/main.ts"></script>
-</head>
+  <body>
+    <main
+      class="wrap"
+      x-data="sheet()"
+      x-cloak
+      @sheet-short-rest.window="shortRest()"
+      @sheet-long-rest.window="longRest()"
+      @sheet-export.window="exportJson()"
+      @sheet-import.window="importJsonText($event.detail)"
+    >
+      <sheet-nav current="traits"></sheet-nav>
 
-<body>
-  <main class="wrap" x-data="sheet()" x-cloak @sheet-short-rest.window="shortRest()"
-    @sheet-long-rest.window="longRest()" @sheet-export.window="exportJson()"
-    @sheet-import.window="importJsonText($event.detail)">
+      <datalist id="dl-prof">
+        <option value="Common"></option>
+        <option value="Dwarvish"></option>
+        <option value="Elvish"></option>
+        <option value="Giant"></option>
+        <option value="Gnomish"></option>
+        <option value="Goblin"></option>
+        <option value="Halfling"></option>
+        <option value="Orc"></option>
+        <option value="Abyssal"></option>
+        <option value="Celestial"></option>
+        <option value="Draconic"></option>
+        <option value="Deep Speech"></option>
+        <option value="Infernal"></option>
+        <option value="Primordial"></option>
+        <option value="Sylvan"></option>
+        <option value="Undercommon"></option>
+        <option value="Thieves' Cant"></option>
+        <option value="Druidic"></option>
+        <option value="Light Armor"></option>
+        <option value="Medium Armor"></option>
+        <option value="Heavy Armor"></option>
+        <option value="Shields"></option>
+        <option value="Simple Weapons"></option>
+        <option value="Martial Weapons"></option>
+        <option value="Padded Armor"></option>
+        <option value="Leather Armor"></option>
+        <option value="Studded Leather Armor"></option>
+        <option value="Hide Armor"></option>
+        <option value="Chain Shirt"></option>
+        <option value="Scale Mail"></option>
+        <option value="Breastplate"></option>
+        <option value="Half Plate"></option>
+        <option value="Ring Mail"></option>
+        <option value="Chain Mail"></option>
+        <option value="Splint Armor"></option>
+        <option value="Plate Armor"></option>
+        <option value="Club"></option>
+        <option value="Dagger"></option>
+        <option value="Greatclub"></option>
+        <option value="Handaxe"></option>
+        <option value="Javelin"></option>
+        <option value="Light Hammer"></option>
+        <option value="Mace"></option>
+        <option value="Quarterstaff"></option>
+        <option value="Sickle"></option>
+        <option value="Spear"></option>
+        <option value="Light Crossbow"></option>
+        <option value="Dart"></option>
+        <option value="Shortbow"></option>
+        <option value="Sling"></option>
+        <option value="Battleaxe"></option>
+        <option value="Flail"></option>
+        <option value="Glaive"></option>
+        <option value="Greataxe"></option>
+        <option value="Greatsword"></option>
+        <option value="Halberd"></option>
+        <option value="Lance"></option>
+        <option value="Longsword"></option>
+        <option value="Maul"></option>
+        <option value="Morningstar"></option>
+        <option value="Pike"></option>
+        <option value="Rapier"></option>
+        <option value="Scimitar"></option>
+        <option value="Shortsword"></option>
+        <option value="Trident"></option>
+        <option value="War Pick"></option>
+        <option value="Warhammer"></option>
+        <option value="Whip"></option>
+        <option value="Blowgun"></option>
+        <option value="Hand Crossbow"></option>
+        <option value="Heavy Crossbow"></option>
+        <option value="Longbow"></option>
+        <option value="Net"></option>
+        <option value="Thieves' Tools"></option>
+        <option value="Herbalism Kit"></option>
+        <option value="Disguise Kit"></option>
+        <option value="Forgery Kit"></option>
+        <option value="Poisoner's Kit"></option>
+        <option value="Healer's Kit"></option>
+        <option value="Alchemist's Supplies"></option>
+        <option value="Brewer's Supplies"></option>
+        <option value="Calligrapher's Supplies"></option>
+        <option value="Carpenter's Tools"></option>
+        <option value="Cartographer's Tools"></option>
+        <option value="Cobbler's Tools"></option>
+        <option value="Cook's Utensils"></option>
+        <option value="Glassblower's Tools"></option>
+        <option value="Jeweler's Tools"></option>
+        <option value="Leatherworker's Tools"></option>
+        <option value="Mason's Tools"></option>
+        <option value="Painter's Supplies"></option>
+        <option value="Potter's Tools"></option>
+        <option value="Smith's Tools"></option>
+        <option value="Tinker's Tools"></option>
+        <option value="Weaver's Tools"></option>
+        <option value="Woodcarver's Tools"></option>
+        <option value="Navigator's Tools"></option>
+        <option value="Vehicles (Land)"></option>
+        <option value="Vehicles (Water)"></option>
+        <option value="Dice Set"></option>
+        <option value="Dragonchess Set"></option>
+        <option value="Playing Card Set"></option>
+        <option value="Three-Dragon Ante Set"></option>
+        <option value="Bagpipes"></option>
+        <option value="Drum"></option>
+        <option value="Dulcimer"></option>
+        <option value="Flute"></option>
+        <option value="Horn"></option>
+        <option value="Lute"></option>
+        <option value="Lyre"></option>
+        <option value="Pan Flute"></option>
+        <option value="Shawm"></option>
+        <option value="Viol"></option>
+      </datalist>
+      <sheet-toolbar></sheet-toolbar>
 
-    <sheet-nav current="traits"></sheet-nav>
+      <div class="panel">
+        <fieldset style="margin-bottom: 12px">
+          <legend>Other Proficiencies &amp; Languages</legend>
+          <div
+            style="display: flex; gap: 6px; flex-wrap: wrap; margin-bottom: 8px"
+          >
+            <template x-for="(p,i) in c.profList" :key="i">
+              <span class="chip"><span x-text="p"></span><button
+                  class="noprint"
+                  type="button"
+                  title="Remove"
+                  @click="c.profList.splice(i,1)"
+                >
+                  ×
+                </button></span>
+            </template>
+          </div>
+          <div class="noprint" style="display: flex; gap: 6px; flex-wrap: wrap">
+            <input
+              x-model="profDraft"
+              @keydown.enter.prevent="addProf()"
+              list="dl-prof"
+              placeholder="Type a language or proficiency, then Add"
+              style="flex: 1; min-width: 200px"
+            >
+            <button type="button" @click="addProf()">Add</button>
+          </div>
+        </fieldset>
 
-    <datalist id="dl-prof">
-      <option value="Common"></option>
-      <option value="Dwarvish"></option>
-      <option value="Elvish"></option>
-      <option value="Giant"></option>
-      <option value="Gnomish"></option>
-      <option value="Goblin"></option>
-      <option value="Halfling"></option>
-      <option value="Orc"></option>
-      <option value="Abyssal"></option>
-      <option value="Celestial"></option>
-      <option value="Draconic"></option>
-      <option value="Deep Speech"></option>
-      <option value="Infernal"></option>
-      <option value="Primordial"></option>
-      <option value="Sylvan"></option>
-      <option value="Undercommon"></option>
-      <option value="Thieves' Cant"></option>
-      <option value="Druidic"></option>
-      <option value="Light Armor"></option>
-      <option value="Medium Armor"></option>
-      <option value="Heavy Armor"></option>
-      <option value="Shields"></option>
-      <option value="Simple Weapons"></option>
-      <option value="Martial Weapons"></option>
-      <option value="Padded Armor"></option>
-      <option value="Leather Armor"></option>
-      <option value="Studded Leather Armor"></option>
-      <option value="Hide Armor"></option>
-      <option value="Chain Shirt"></option>
-      <option value="Scale Mail"></option>
-      <option value="Breastplate"></option>
-      <option value="Half Plate"></option>
-      <option value="Ring Mail"></option>
-      <option value="Chain Mail"></option>
-      <option value="Splint Armor"></option>
-      <option value="Plate Armor"></option>
-      <option value="Club"></option>
-      <option value="Dagger"></option>
-      <option value="Greatclub"></option>
-      <option value="Handaxe"></option>
-      <option value="Javelin"></option>
-      <option value="Light Hammer"></option>
-      <option value="Mace"></option>
-      <option value="Quarterstaff"></option>
-      <option value="Sickle"></option>
-      <option value="Spear"></option>
-      <option value="Light Crossbow"></option>
-      <option value="Dart"></option>
-      <option value="Shortbow"></option>
-      <option value="Sling"></option>
-      <option value="Battleaxe"></option>
-      <option value="Flail"></option>
-      <option value="Glaive"></option>
-      <option value="Greataxe"></option>
-      <option value="Greatsword"></option>
-      <option value="Halberd"></option>
-      <option value="Lance"></option>
-      <option value="Longsword"></option>
-      <option value="Maul"></option>
-      <option value="Morningstar"></option>
-      <option value="Pike"></option>
-      <option value="Rapier"></option>
-      <option value="Scimitar"></option>
-      <option value="Shortsword"></option>
-      <option value="Trident"></option>
-      <option value="War Pick"></option>
-      <option value="Warhammer"></option>
-      <option value="Whip"></option>
-      <option value="Blowgun"></option>
-      <option value="Hand Crossbow"></option>
-      <option value="Heavy Crossbow"></option>
-      <option value="Longbow"></option>
-      <option value="Net"></option>
-      <option value="Thieves' Tools"></option>
-      <option value="Herbalism Kit"></option>
-      <option value="Disguise Kit"></option>
-      <option value="Forgery Kit"></option>
-      <option value="Poisoner's Kit"></option>
-      <option value="Healer's Kit"></option>
-      <option value="Alchemist's Supplies"></option>
-      <option value="Brewer's Supplies"></option>
-      <option value="Calligrapher's Supplies"></option>
-      <option value="Carpenter's Tools"></option>
-      <option value="Cartographer's Tools"></option>
-      <option value="Cobbler's Tools"></option>
-      <option value="Cook's Utensils"></option>
-      <option value="Glassblower's Tools"></option>
-      <option value="Jeweler's Tools"></option>
-      <option value="Leatherworker's Tools"></option>
-      <option value="Mason's Tools"></option>
-      <option value="Painter's Supplies"></option>
-      <option value="Potter's Tools"></option>
-      <option value="Smith's Tools"></option>
-      <option value="Tinker's Tools"></option>
-      <option value="Weaver's Tools"></option>
-      <option value="Woodcarver's Tools"></option>
-      <option value="Navigator's Tools"></option>
-      <option value="Vehicles (Land)"></option>
-      <option value="Vehicles (Water)"></option>
-      <option value="Dice Set"></option>
-      <option value="Dragonchess Set"></option>
-      <option value="Playing Card Set"></option>
-      <option value="Three-Dragon Ante Set"></option>
-      <option value="Bagpipes"></option>
-      <option value="Drum"></option>
-      <option value="Dulcimer"></option>
-      <option value="Flute"></option>
-      <option value="Horn"></option>
-      <option value="Lute"></option>
-      <option value="Lyre"></option>
-      <option value="Pan Flute"></option>
-      <option value="Shawm"></option>
-      <option value="Viol"></option>
-    </datalist>
-    <sheet-toolbar></sheet-toolbar>
-
-    <div class="panel">
-      <fieldset style="margin-bottom:12px">
-        <legend>Other Proficiencies &amp; Languages</legend>
-        <div style="display:flex;gap:6px;flex-wrap:wrap;margin-bottom:8px">
-          <template x-for="(p,i) in c.profList" :key="i">
-            <span class="chip"><span x-text="p"></span><button class="noprint" type="button" title="Remove"
-                @click="c.profList.splice(i,1)">×</button></span>
-          </template>
-        </div>
-        <div class="noprint" style="display:flex;gap:6px;flex-wrap:wrap">
-          <input x-model="profDraft" @keydown.enter.prevent="addProf()" list="dl-prof"
-            placeholder="Type a language or proficiency, then Add" style="flex:1;min-width:200px">
-          <button type="button" @click="addProf()">Add</button>
-        </div>
-      </fieldset>
-
-      <fieldset>
-        <legend>Features &amp; Traits</legend>
-        <div class="col" style="gap:8px">
-          <template x-for="f in c.features" :key="f.id">
-            <details class="card">
-              <summary>
-                <span style="flex:1" x-text="f.name||'Unnamed feature'"></span>
-                <span style="font-size:12px;font-weight:700;color:var(--accent);font-variant-numeric:tabular-nums"
-                  x-text="mBadge(f)"></span>
-              </summary>
-              <div class="card-body">
-                <div style="display:flex;gap:8px;align-items:flex-end">
-                  <label class="field" style="flex:1">Name<input x-model="f.name" placeholder="Feature / trait name"
-                      style="font-weight:600"></label>
-                  <button class="noprint" title="Remove"
-                    @click="c.features=c.features.filter(x=>x.id!==f.id)">Delete</button>
-                </div>
-
-                <div class="metric-box">
-                  <div class="metric-row">
-                    <label class="field">Tracker
-                      <select x-model="f.metric" @change="seedUses(f)">
-                        <option value="none">None</option>
-                        <option value="uses">Uses — limited-use pool</option>
-                        <option value="dice">Dice — e.g. Sneak Attack</option>
-                        <option value="bonus">Static bonus — e.g. Rage damage</option>
-                      </select></label>
-                    <label class="field" x-show="f.metric!=='none'">Value from
-                      <select x-model="f.source">
-                        <option value="pb">Proficiency Bonus</option>
-                        <option value="ability">Ability Modifier</option>
-                        <option value="level">Character Level</option>
-                        <option value="fixed">Fixed number</option>
-                        <option value="formula">Custom formula</option>
-                      </select></label>
-                    <label class="field" x-show="f.metric!=='none'&&f.source==='ability'">Ability
-                      <select x-model="f.ability">
-                        <option value="str">STR</option>
-                        <option value="dex">DEX</option>
-                        <option value="con">CON</option>
-                        <option value="int">INT</option>
-                        <option value="wis">WIS</option>
-                        <option value="cha">CHA</option>
-                      </select></label>
-                    <label class="field" x-show="f.metric!=='none'&&f.source==='fixed'">Number<input type="number"
-                        min="0" x-model="f.fixed" style="width:70px"></label>
-                    <label class="field" x-show="f.metric!=='none'&&f.source==='formula'">Formula<input
-                        x-model="f.formula" placeholder="floor(PB/2)" style="width:150px"></label>
-                    <label class="field" x-show="f.metric==='dice'">Die
-                      <select x-model="f.dieSize">
-                        <option value="4">d4</option>
-                        <option value="6">d6</option>
-                        <option value="8">d8</option>
-                        <option value="10">d10</option>
-                        <option value="12">d12</option>
-                        <option value="20">d20</option>
-                      </select></label>
-                    <label class="field" x-show="f.metric==='uses'">Resets on
-                      <select x-model="f.reset">
-                        <option value="none">Never / manual</option>
-                        <option value="short">Short rest</option>
-                        <option value="long">Long rest</option>
-                      </select></label>
+        <fieldset>
+          <legend>Features &amp; Traits</legend>
+          <div class="col" style="gap: 8px">
+            <template x-for="f in c.features" :key="f.id">
+              <details class="card">
+                <summary>
+                  <span
+                    style="flex: 1"
+                    x-text="f.name||'Unnamed feature'"
+                  ></span>
+                  <span
+                    style="font-size: 12px; font-weight: 700; color: var(--accent); font-variant-numeric: tabular-nums"
+                    x-text="mBadge(f)"
+                  ></span>
+                </summary>
+                <div class="card-body">
+                  <div style="display: flex; gap: 8px; align-items: flex-end">
+                    <label class="field" style="flex: 1">Name<input
+                        x-model="f.name"
+                        placeholder="Feature / trait name"
+                        style="font-weight: 600"
+                      ></label>
+                    <button
+                      class="noprint"
+                      title="Remove"
+                      @click="c.features=c.features.filter(x=>x.id!==f.id)"
+                    >
+                      Delete
+                    </button>
                   </div>
-                  <div class="mrow" x-show="f.metric==='uses'">
-                    <span style="font-size:11px;text-transform:uppercase;letter-spacing:.05em;color:var(--muted)">Uses</span>
-                    <button @click="setUses(f,mCur(f)-1)" style="width:30px;font-size:16px;line-height:1">−</button>
-                    <span
-                      style="font-weight:700;font-size:16px;min-width:56px;text-align:center;font-variant-numeric:tabular-nums"
-                      x-text="mCur(f)+' / '+mVal(f)"></span>
-                    <button @click="setUses(f,mCur(f)+1)" style="width:30px;font-size:16px;line-height:1">+</button>
-                    <span style="display:flex;gap:4px;flex-wrap:wrap;margin-left:6px">
-                      <template x-for="i in pipCount(f)" :key="i"><span @click="pipClick(f,i)"
-                          class="pip" :class="{ on: i <= mCur(f) }"></span></template>
-                    </span>
+
+                  <div class="metric-box">
+                    <div class="metric-row">
+                      <label class="field">Tracker
+                        <select x-model="f.metric" @change="seedUses(f)">
+                          <option value="none">None</option>
+                          <option value="uses">Uses — limited-use pool</option>
+                          <option value="dice">Dice — e.g. Sneak Attack</option>
+                          <option value="bonus">
+                            Static bonus — e.g. Rage damage
+                          </option>
+                        </select></label>
+                      <label class="field" x-show="f.metric!=='none'">Value from
+                        <select x-model="f.source">
+                          <option value="pb">Proficiency Bonus</option>
+                          <option value="ability">Ability Modifier</option>
+                          <option value="level">Character Level</option>
+                          <option value="fixed">Fixed number</option>
+                          <option value="formula">Custom formula</option>
+                        </select></label>
+                      <label
+                        class="field"
+                        x-show="f.metric!=='none'&&f.source==='ability'"
+                      >Ability
+                        <select x-model="f.ability">
+                          <option value="str">STR</option>
+                          <option value="dex">DEX</option>
+                          <option value="con">CON</option>
+                          <option value="int">INT</option>
+                          <option value="wis">WIS</option>
+                          <option value="cha">CHA</option>
+                        </select></label>
+                      <label
+                        class="field"
+                        x-show="f.metric!=='none'&&f.source==='fixed'"
+                      >Number<input
+                          type="number"
+                          min="0"
+                          x-model="f.fixed"
+                          style="width: 70px"
+                        ></label>
+                      <label
+                        class="field"
+                        x-show="f.metric!=='none'&&f.source==='formula'"
+                      >Formula<input
+                          x-model="f.formula"
+                          placeholder="floor(PB/2)"
+                          style="width: 150px"
+                        ></label>
+                      <label class="field" x-show="f.metric==='dice'">Die
+                        <select x-model="f.dieSize">
+                          <option value="4">d4</option>
+                          <option value="6">d6</option>
+                          <option value="8">d8</option>
+                          <option value="10">d10</option>
+                          <option value="12">d12</option>
+                          <option value="20">d20</option>
+                        </select></label>
+                      <label class="field" x-show="f.metric==='uses'">Resets on
+                        <select x-model="f.reset">
+                          <option value="none">Never / manual</option>
+                          <option value="short">Short rest</option>
+                          <option value="long">Long rest</option>
+                        </select></label>
+                    </div>
+                    <div class="mrow" x-show="f.metric==='uses'">
+                      <span
+                        style="font-size: 11px; text-transform: uppercase; letter-spacing: 0.05em; color: var(--muted)"
+                      >Uses</span>
+                      <button
+                        @click="setUses(f,mCur(f)-1)"
+                        style="width: 30px; font-size: 16px; line-height: 1"
+                      >
+                        −
+                      </button>
+                      <span
+                        style="font-weight: 700; font-size: 16px; min-width: 56px; text-align: center; font-variant-numeric: tabular-nums"
+                        x-text="mCur(f)+' / '+mVal(f)"
+                      ></span>
+                      <button
+                        @click="setUses(f,mCur(f)+1)"
+                        style="width: 30px; font-size: 16px; line-height: 1"
+                      >
+                        +
+                      </button>
+                      <span
+                        style="display: flex; gap: 4px; flex-wrap: wrap; margin-left: 6px"
+                      >
+                        <template x-for="i in pipCount(f)" :key="i"><span
+                            @click="pipClick(f,i)"
+                            class="pip"
+                            :class="{ on: i <= mCur(f) }"
+                          ></span></template>
+                      </span>
+                    </div>
+                    <div x-show="f.metric==='dice'" style="font-size: 13px">
+                      Result: <b
+                        x-text="mVal(f)+'d'+(f.dieSize||'6')"
+                      ></b>
+                    </div>
+                    <div x-show="f.metric==='bonus'" style="font-size: 13px">
+                      Result: <b x-text="fmt(mVal(f))"></b>
+                    </div>
+                    <div
+                      x-show="f.metric!=='none'&&f.source==='formula'"
+                      style="font-size: 11px; color: var(--muted)"
+                    >
+                      Variables: PB, LEVEL, STR DEX CON INT WIS CHA · functions
+                      floor ceil round max min abs · e.g. Sneak Attack =
+                      <code>ceil(LEVEL/2)</code>, Jack of All Trades = <code
+                      >floor(PB/2)</code>
+                    </div>
                   </div>
-                  <div x-show="f.metric==='dice'" style="font-size:13px">Result: <b
-                      x-text="mVal(f)+'d'+(f.dieSize||'6')"></b></div>
-                  <div x-show="f.metric==='bonus'" style="font-size:13px">Result: <b x-text="fmt(mVal(f))"></b></div>
-                  <div x-show="f.metric!=='none'&&f.source==='formula'" style="font-size:11px;color:var(--muted)">Variables: PB,
-                    LEVEL, STR DEX CON INT WIS CHA · functions floor ceil round max min abs · e.g. Sneak Attack =
-                    <code>ceil(LEVEL/2)</code>, Jack of All Trades = <code>floor(PB/2)</code></div>
-                </div>
 
-                <div class="field">
-                  <div style="display:flex;justify-content:space-between;align-items:center"><span>Description</span>
-                    <button class="noprint" @click="mdToggle('f-'+f.id)" style="padding:1px 8px"
-                      x-text="preview['f-'+f.id]?'Edit':'Preview'"></button>
+                  <div class="field">
+                    <div
+                      style="display: flex; justify-content: space-between; align-items: center"
+                    >
+                      <span>Description</span>
+                      <button
+                        class="noprint"
+                        @click="mdToggle('f-'+f.id)"
+                        style="padding: 1px 8px"
+                        x-text="preview['f-'+f.id]?'Edit':'Preview'"
+                      >
+                      </button>
+                    </div>
+                    <div x-show="!preview['f-'+f.id]">
+                      <textarea
+                        x-model="f.desc"
+                        placeholder="Markdown: **bold**, *italic*, `code`, - lists, [link](https://…)"
+                      ></textarea>
+                    </div>
+                    <div
+                      class="md-view"
+                      x-show="preview['f-'+f.id]"
+                      x-html="mdToHtml(f.desc)"
+                    >
+                    </div>
                   </div>
-                  <div x-show="!preview['f-'+f.id]"><textarea x-model="f.desc"
-                      placeholder="Markdown: **bold**, *italic*, `code`, - lists, [link](https://…)"></textarea></div>
-                  <div class="md-view" x-show="preview['f-'+f.id]" x-html="mdToHtml(f.desc)"></div>
                 </div>
-              </div>
-            </details>
-          </template>
-        </div>
-        <button class="noprint" style="margin-top:10px" @click="c.features.push(newFeature())">+ Add feature /
-          trait</button>
-      </fieldset>
-    </div>
+              </details>
+            </template>
+          </div>
+          <button
+            class="noprint"
+            style="margin-top: 10px"
+            @click="c.features.push(newFeature())"
+          >
+            + Add feature / trait
+          </button>
+        </fieldset>
+      </div>
 
-    <p class="page-foot noprint">
-      Auto-saves to this browser · Use your browser's Print to export this page as a PDF · Text areas support basic
-      Markdown. Game rules © Wizards of the Coast; this is an original sheet layout.
-    </p>
-  </main>
-</body>
-
+     <sheet-footer></sheet-footer> 
+    </main>
+  </body>
 </html>
