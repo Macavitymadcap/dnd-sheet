@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Background · D&amp;D Character Sheet</title>
+  <script>
+    try { var t = localStorage.getItem('dnd-theme'); document.documentElement.dataset.theme = t || (matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light'); } catch (e) { }
+  </script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet"
+    href="https://fonts.googleapis.com/css2?family=Alegreya:ital,wght@0,400;0,500;0,700;1,400&family=Cinzel:wght@500;600;700&display=swap">
+  <link rel="stylesheet" href="../styles.css">
+  <script type="module" src="../src/main.ts"></script>
+</head>
+
+<body>
+  <main class="wrap" x-data="sheet()" x-cloak @sheet-short-rest.window="shortRest()"
+    @sheet-long-rest.window="longRest()" @sheet-export.window="exportJson()"
+    @sheet-import.window="importJsonText($event.detail)">
+
+    <sheet-nav current="background"></sheet-nav>
+
+
+    <sheet-toolbar></sheet-toolbar>
+
+    <div class="panel">
+      <div class="r-2">
+        <div class="col">
+          <template x-for="g in BG_FIELDS" :key="g[0]">
+            <fieldset>
+              <legend x-text="g[1]"></legend>
+              <div style="display:flex;justify-content:flex-end;margin-bottom:2px">
+                <button class="noprint" @click="mdToggle('bg-'+g[0])" style="padding:1px 8px"
+                  x-text="preview['bg-'+g[0]]?'Edit':'Preview'"></button>
+              </div>
+              <div x-show="!preview['bg-'+g[0]]"><textarea x-model="c[g[0]]"></textarea></div>
+              <div class="md-view" x-show="preview['bg-'+g[0]]" x-html="mdToHtml(c[g[0]])"></div>
+            </fieldset>
+          </template>
+        </div>
+        <div class="col">
+          <fieldset>
+            <legend>Character Appearance</legend>
+            <div class="r-3" style="margin-bottom:8px">
+              <label class="field">Age<input x-model="c.age"></label>
+              <label class="field">Height<input x-model="c.height"></label>
+              <label class="field">Weight<input x-model="c.weight"></label>
+              <label class="field">Eyes<input x-model="c.eyes"></label>
+              <label class="field">Skin<input x-model="c.skin"></label>
+              <label class="field">Hair<input x-model="c.hair"></label>
+            </div>
+            <div style="display:flex;justify-content:space-between;align-items:center"><span
+                style="font-size:12px">Notes</span>
+              <button class="noprint" @click="mdToggle('bg-appearance')" style="padding:1px 8px"
+                x-text="preview['bg-appearance']?'Edit':'Preview'"></button>
+            </div>
+            <div x-show="!preview['bg-appearance']"><textarea x-model="c.appearance"></textarea></div>
+            <div class="md-view" x-show="preview['bg-appearance']" x-html="mdToHtml(c.appearance)"></div>
+          </fieldset>
+          <fieldset>
+            <legend>Allies &amp; Organizations</legend>
+            <label class="field" style="margin-bottom:6px">Faction / Symbol name<input x-model="c.factionName"></label>
+            <div style="display:flex;justify-content:space-between;align-items:center"><span
+                style="font-size:12px">Members &amp; notes</span>
+              <button class="noprint" @click="mdToggle('bg-allies')" style="padding:1px 8px"
+                x-text="preview['bg-allies']?'Edit':'Preview'"></button>
+            </div>
+            <div x-show="!preview['bg-allies']"><textarea x-model="c.allies"></textarea></div>
+            <div class="md-view" x-show="preview['bg-allies']" x-html="mdToHtml(c.allies)"></div>
+          </fieldset>
+          <fieldset>
+            <legend>Treasure</legend>
+            <div style="display:flex;justify-content:flex-end;margin-bottom:2px">
+              <button class="noprint" @click="mdToggle('bg-treasure')" style="padding:1px 8px"
+                x-text="preview['bg-treasure']?'Edit':'Preview'"></button>
+            </div>
+            <div x-show="!preview['bg-treasure']"><textarea x-model="c.treasure"></textarea></div>
+            <div class="md-view" x-show="preview['bg-treasure']" x-html="mdToHtml(c.treasure)"></div>
+          </fieldset>
+        </div>
+      </div>
+      <fieldset style="margin-top:12px">
+        <legend>Character Backstory</legend>
+        <div style="display:flex;justify-content:flex-end;margin-bottom:2px">
+          <button class="noprint" @click="mdToggle('bg-backstory')" style="padding:1px 8px"
+            x-text="preview['bg-backstory']?'Edit':'Preview'"></button>
+        </div>
+        <div x-show="!preview['bg-backstory']"><textarea x-model="c.backstory" style="min-height:160px"></textarea>
+        </div>
+        <div class="md-view" x-show="preview['bg-backstory']" style="min-height:160px" x-html="mdToHtml(c.backstory)">
+        </div>
+      </fieldset>
+    </div>
+
+    <p class="page-foot noprint">
+      Auto-saves to this browser · Use your browser's Print to export this page as a PDF · Text areas support basic
+      Markdown. Game rules © Wizards of the Coast; this is an original sheet layout.
+    </p>
+  </main>
+</body>
+
+</html>
